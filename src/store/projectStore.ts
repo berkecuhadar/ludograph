@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { newId } from '../lib/id';
 import { strings } from '../lib/strings';
 import { checkEdge, type EdgeCheck } from '../model/edgeRules';
+import { autoLayout } from '../views/autoLayout';
 import { createNode, createProject } from '../model/factory';
 import {
   ensureChildGraph,
@@ -58,6 +59,8 @@ type ProjectState = {
   /** Changes several nodes in one undo step. */
   updateNodes: (patches: Record<string, Partial<GameNode>>) => void;
   moveNodes: (positions: Record<string, Point>) => void;
+  /** Arranges the nodes of the current graph along their edges, as one undo step. */
+  autoLayout: () => void;
   setViewPositions: (view: PlacedView, positions: Record<string, Point>) => void;
   removeNodes: (ids: string[]) => void;
   duplicateNodes: (ids: string[]) => string[];
@@ -193,6 +196,17 @@ export const useProjectStore = create<ProjectState>()((set, get) => {
         }),
         { coalesce: 'move' },
       ),
+
+    autoLayout: () => {
+      const { project, activeGraphId } = get();
+      const graph = project.graphs[activeGraphId];
+      if (!graph || graph.nodes.length === 0) return;
+      const positions = autoLayout(graph.nodes, graph.edges);
+      editGraph((g) => ({
+        ...g,
+        nodes: g.nodes.map((n) => ({ ...n, position: positions[n.id] ?? n.position })),
+      }));
+    },
 
     setViewPositions: (view, positions) => {
       const { project } = get();

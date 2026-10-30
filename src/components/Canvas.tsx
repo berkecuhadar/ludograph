@@ -28,6 +28,7 @@ import { computeLayout } from '../views/computeLayout';
 import { computeDisplay } from '../views/display';
 import { classifyMda } from '../views/mdaLayout';
 import { classifyOnion } from '../views/onionLayout';
+import { AutoLayoutButton } from './AutoLayoutButton';
 import { DisplayContext } from './displayContext';
 import { EdgeLegend } from './EdgeLegend';
 import { edgeColor, edgeLineStyle, edgeMarker, WARNING_COLOR } from './edgeStyle';
@@ -317,6 +318,7 @@ export function Canvas() {
           <Panel position="top-center" className="canvas-toolbar">
             <ViewSwitcher />
             <FilterBar />
+            {view === 'graph' && <AutoLayoutButton />}
           </Panel>
           <Panel position="bottom-left" className="legend-panel">
             <EdgeLegend />

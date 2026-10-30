@@ -153,6 +153,8 @@ export const strings = {
     onion: 'Onion',
     mda: 'MDA',
     noLayer: 'No layer',
+    autoLayout: 'Auto layout',
+    autoLayoutHint: 'Arrange the nodes left to right along their edges (can be undone)',
     hint: {
       graph: 'Free layout',
       onion: 'Drag a node into a ring to change its layer',
