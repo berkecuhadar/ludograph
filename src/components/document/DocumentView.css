@@ -1,0 +1,261 @@
+.doc-view {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 0;
+  grid-row: 2 / 4;
+}
+
+.doc-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.doc-toolbar button,
+.doc-view button {
+  padding: 3px var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.doc-view button.small {
+  padding: 1px var(--space-2);
+  font-size: 12px;
+}
+
+.doc-view button.danger {
+  color: var(--danger);
+}
+
+.doc-note {
+  margin-left: auto;
+  font-size: 12px;
+}
+
+.doc-panes {
+  display: grid;
+  grid-template-columns: minmax(380px, 1fr) minmax(380px, 1fr);
+  min-height: 0;
+}
+
+.doc-scroll {
+  min-height: 0;
+  padding: var(--space-4);
+  overflow-y: auto;
+}
+
+.doc-preview-pane {
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+}
+
+/* The form */
+.doc-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 720px;
+}
+
+.doc-form h2 {
+  margin: 0 0 var(--space-2);
+  font-size: 14px;
+}
+
+.doc-heading {
+  margin-top: var(--space-3);
+}
+
+.doc-block {
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.doc-question {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.doc-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-bottom: var(--space-3);
+}
+
+.doc-field-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.doc-field-head label {
+  font-weight: 600;
+}
+
+.doc-field-tools {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.doc-field .hint {
+  margin: 0;
+  font-size: 12px;
+}
+
+.doc-view input[type='text'],
+.doc-view textarea {
+  width: 100%;
+  padding: 5px var(--space-2);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font: inherit;
+}
+
+.doc-view textarea {
+  resize: vertical;
+}
+
+.doc-custom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-bottom: var(--space-3);
+}
+
+.doc-custom button {
+  align-self: flex-start;
+}
+
+/* The preview */
+.doc-preview {
+  max-width: 720px;
+  line-height: 1.55;
+}
+
+.doc-preview h1 {
+  margin: 0 0 var(--space-2);
+  font-size: 26px;
+}
+
+.doc-preview h2 {
+  margin: var(--space-4) 0 var(--space-2);
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid var(--border);
+  font-size: 18px;
+}
+
+.doc-preview h3 {
+  margin: var(--space-3) 0 2px;
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.doc-preview p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.doc-mantra {
+  color: var(--text-muted);
+  font-size: 16px;
+  font-style: italic;
+}
+
+.doc-pillars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.doc-pillars li {
+  padding: 2px var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* Templates dialog */
+.templates {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.templates li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.templates .hint {
+  margin: 2px 0 0;
+  font-size: 12px;
+}
+
+.template-actions {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* Print: only the preview, on white paper. */
+@media print {
+  .app-header,
+  .breadcrumb,
+  .doc-toolbar,
+  .doc-scroll:not(.doc-preview-pane) {
+    display: none !important;
+  }
+
+  html,
+  body,
+  #root,
+  .app,
+  .doc-view,
+  .doc-panes,
+  .doc-scroll {
+    display: block;
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .doc-preview-pane {
+    padding: 0;
+    border: 0;
+  }
+
+  .doc-preview .muted,
+  .doc-preview h3,
+  .doc-mantra {
+    color: #444 !important;
+  }
+}

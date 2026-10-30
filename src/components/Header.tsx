@@ -12,6 +12,7 @@ import { strings } from '../lib/strings';
 import { useProjectStore } from '../store/projectStore';
 import { useUiStore } from '../store/uiStore';
 import { Menu, type MenuItem } from './Menu';
+import './Toolbar.css';
 
 export function Header() {
   const projectName = useProjectStore((s) => s.project.name);
@@ -21,9 +22,28 @@ export function Header() {
   const undo = useProjectStore((s) => s.undo);
   const redo = useProjectStore((s) => s.redo);
   const setDialog = useUiStore((s) => s.setDialog);
+  const mode = useUiStore((s) => s.mode);
+  const setMode = useUiStore((s) => s.setMode);
   const { fitView } = useReactFlow();
   const fileInput = useRef<HTMLInputElement>(null);
   const t = strings.file;
+
+  // The pictures are of the canvas, so they only make sense in the graph editor.
+  const imageItems: MenuItem[] =
+    mode === 'graph'
+      ? [
+          {
+            label: t.exportPng,
+            onSelect: () =>
+              void exportImageFile('png', () => fitView({ padding: 0.1, duration: 0 })),
+          },
+          {
+            label: t.exportSvg,
+            onSelect: () =>
+              void exportImageFile('svg', () => fitView({ padding: 0.1, duration: 0 })),
+          },
+        ]
+      : [];
 
   const items: MenuItem[] = [
     { label: t.new, onSelect: () => void newProject() },
@@ -31,20 +51,20 @@ export function Header() {
     { label: t.save, onSelect: saveFile },
     { label: t.exportMarkdown, onSelect: exportMarkdownFile, separator: true },
     { label: t.exportUnity, onSelect: exportUnityFile },
-    {
-      label: t.exportPng,
-      onSelect: () => void exportImageFile('png', () => fitView({ padding: 0.1, duration: 0 })),
-    },
-    {
-      label: t.exportSvg,
-      onSelect: () => void exportImageFile('svg', () => fitView({ padding: 0.1, duration: 0 })),
-    },
+    ...imageItems,
   ];
 
   return (
     <header className="app-header">
       <strong>{strings.app.name}</strong>
       <Menu label={t.menu} items={items} />
+      <div className="segmented" role="group" aria-label={strings.document.modeLabel}>
+        {(['graph', 'document'] as const).map((m) => (
+          <button key={m} type="button" aria-pressed={mode === m} onClick={() => setMode(m)}>
+            {strings.document[m]}
+          </button>
+        ))}
+      </div>
       <input
         className="project-name"
         type="text"

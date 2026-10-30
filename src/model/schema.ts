@@ -9,6 +9,7 @@ import {
   type BuiltinKind,
   type CustomKind,
   type GameEdge,
+  type Gdd,
   type GameNode,
   type Graph,
   type Layer,
@@ -247,6 +248,45 @@ function parseViewPositions(raw: unknown, r: Reader): Project['viewPositions'] {
   return out;
 }
 
+function parseGdd(raw: unknown, r: Reader): Gdd | undefined {
+  if (raw === undefined) return undefined;
+  if (!isRecord(raw)) {
+    r.fail('gdd', 'expected an object');
+    return undefined;
+  }
+  const gdd: Gdd = { values: {}, enabled: {}, custom: [] };
+
+  if (raw.values !== undefined) {
+    if (!isRecord(raw.values)) r.fail('gdd.values', 'expected an object of text');
+    else {
+      for (const [id, v] of Object.entries(raw.values)) {
+        if (typeof v === 'string') gdd.values[id] = v;
+        else r.fail(`gdd.values.${id}`, `expected text, got ${describe(v)}`);
+      }
+    }
+  }
+  if (raw.enabled !== undefined) {
+    if (!isRecord(raw.enabled)) r.fail('gdd.enabled', 'expected an object of true/false');
+    else {
+      for (const [id, v] of Object.entries(raw.enabled)) {
+        if (typeof v === 'boolean') gdd.enabled[id] = v;
+        else r.fail(`gdd.enabled.${id}`, `expected true or false, got ${describe(v)}`);
+      }
+    }
+  }
+  r.array(raw, 'custom', 'gdd', { optional: true }).forEach((item, i) => {
+    const path = `gdd.custom[${i}]`;
+    if (!isRecord(item)) return r.fail(path, 'expected an object');
+    const id = r.string(item, 'id', path);
+    const title = r.string(item, 'title', path);
+    const body = r.string(item, 'body', path);
+    if (id !== undefined && title !== undefined && body !== undefined) {
+      gdd.custom.push({ id, title, body });
+    }
+  });
+  return gdd;
+}
+
 // Reads a project from untrusted JSON. Collects readable errors instead of throwing.
 export function parseProject(input: unknown): ParseResult {
   const r = new Reader();
@@ -352,6 +392,7 @@ export function parseProject(input: unknown): ParseResult {
   }
 
   const viewPositions = parseViewPositions(input.viewPositions, r);
+  const gdd = parseGdd(input.gdd, r);
 
   if (r.total > 0) {
     const more = r.total - r.errors.length;
@@ -371,6 +412,7 @@ export function parseProject(input: unknown): ParseResult {
   };
   if (viewPositions) project.viewPositions = viewPositions;
   if (input.coreOnly === true) project.coreOnly = true;
+  if (gdd) project.gdd = gdd;
   return { ok: true, project };
 }
 

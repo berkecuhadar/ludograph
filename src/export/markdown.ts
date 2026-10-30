@@ -1,4 +1,6 @@
 import { stepMatches, type StepId } from '../designPath/steps';
+import { gddMarkdown } from '../gdd/markdown';
+import { hasContent } from '../gdd/sections';
 import { strings } from '../lib/strings';
 import { kindGroup } from '../model/edgeRules';
 import { kindLabel } from '../model/kinds';
@@ -177,15 +179,28 @@ function renderGraph(
 // experience and personas first when working outside-in, the core first otherwise.
 // Drill-down graphs are nested under the node they are inside of.
 export function exportMarkdown(project: Project): string {
-  const out: string[] = [heading(1, project.name), ''];
-  out.push(
-    strings.gdd.workingOrder(strings.designPath.orders[project.designOrder].toLowerCase()),
-    '',
-  );
-  if (project.coreOnly) out.push(`> ${strings.gdd.coreOnlyNote}`, '');
+  const hasModel = Object.values(project.graphs).some((g) => g.nodes.length > 0);
+  const hasForm = hasContent(project.gdd);
+  const out: string[] = [];
 
-  const root = project.graphs[project.rootGraphId];
-  if (root) renderGraph(project, root, 2, out, new Set());
+  // With a written document, that comes first and the graph follows as "Design model".
+  if (project.gdd && hasForm) {
+    out.push(gddMarkdown(project.gdd, project.name).trimEnd(), '');
+    if (hasModel) out.push(heading(2, strings.gdd.designModel), '');
+  } else {
+    out.push(heading(1, project.name), '');
+  }
+
+  if (hasModel || !hasForm) {
+    out.push(
+      strings.gdd.workingOrder(strings.designPath.orders[project.designOrder].toLowerCase()),
+      '',
+    );
+    if (project.coreOnly) out.push(`> ${strings.gdd.coreOnlyNote}`, '');
+    const root = project.graphs[project.rootGraphId];
+    if (root) renderGraph(project, root, hasForm ? 3 : 2, out, new Set());
+  }
+
   return `${out
     .join('\n')
     .replace(/\n{3,}/g, '\n\n')

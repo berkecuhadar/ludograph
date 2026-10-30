@@ -31,6 +31,9 @@ prototype mode, and the validation rules.
 - Drill-down: double-click a node to open the graph inside it.
 - Design Path panel, outside-in or core-first, with core-only prototype mode.
 - Validation panel with 16 checks.
+- A Document view for the written game design document (one-pager, optional sections, your own
+  sections, three templates), based on [OpenGDD](https://github.com/berkecuhadar/opengdd). It can pull
+  text from the graph, and the Markdown export puts it in front of the graph as the design model.
 - Export to Markdown (a GDD), Unity JSON, PNG and SVG.
 
 More detail is in [docs/data-model.md](docs/data-model.md).
@@ -48,8 +51,7 @@ Press `?` (or the key left of 1) in the app for the keyboard shortcuts.
 
 ## Plan
 
-A text GDD module based on [OpenGDD](https://github.com/berkecuhadar/opengdd), and maybe resource-flow
-simulation after that.
+Maybe resource-flow simulation, in the spirit of Machinations. Turkish text for the interface.
 
 ## License
 

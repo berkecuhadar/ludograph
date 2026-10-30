@@ -166,3 +166,53 @@ describe('exportMarkdown', () => {
     expect(exportMarkdown(project)).toContain('### Note');
   });
 });
+
+describe('exportMarkdown with a written document', () => {
+  const withDocument = () => {
+    const built = build();
+    built.make('mechanic', { title: 'Core thing' });
+    built.make('aesthetic', { title: 'Fellowship' });
+    built.project.gdd = {
+      values: { title: 'Cloud Keeper', mantra: 'A calm game.', summary: 'Look after the sky.' },
+      enabled: { story: true },
+      custom: [{ id: 'c1', title: 'Accessibility', body: 'Colorblind modes.' }],
+    };
+    return built.project;
+  };
+
+  it('puts the written document first and the graph after it as the design model', () => {
+    const md = exportMarkdown(withDocument());
+    expect(md.startsWith('# Cloud Keeper')).toBe(true);
+    expect(md).toContain('## Summary\n\nLook after the sky.');
+    expect(md).toContain('## Accessibility');
+    const model = md.indexOf('## Design model');
+    expect(model).toBeGreaterThan(md.indexOf('## Accessibility'));
+    expect(md.indexOf('Working order:')).toBeGreaterThan(model);
+  });
+
+  it('moves the graph sections one level down under the design model', () => {
+    const md = exportMarkdown(withDocument());
+    expect(md).toContain('### Experience');
+    expect(md).toContain('#### Fellowship');
+    expect(md).toContain('### Core mechanic (layer 0)');
+    expect(md).not.toMatch(/^## Experience/m);
+  });
+
+  it('leaves out the design model heading when the graph is empty', () => {
+    const project = createProject('Empty graph');
+    project.gdd = { values: { title: 'Only text' }, enabled: {}, custom: [] };
+    const md = exportMarkdown(project);
+    expect(md.startsWith('# Only text')).toBe(true);
+    expect(md).not.toContain('Design model');
+  });
+
+  it('is the old output when the document is empty', () => {
+    const { project, make } = build();
+    make('mechanic', { title: 'Core thing' });
+    project.gdd = { values: {}, enabled: {}, custom: [] };
+    const md = exportMarkdown(project);
+    expect(md.startsWith('# Sample game')).toBe(true);
+    expect(md).toContain('## Core mechanic (layer 0)');
+    expect(md).not.toContain('Design model');
+  });
+});

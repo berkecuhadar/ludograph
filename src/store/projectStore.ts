@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { newId } from '../lib/id';
 import { strings } from '../lib/strings';
+import { emptyGdd } from '../gdd/sections';
 import { checkEdge, type EdgeCheck } from '../model/edgeRules';
 import { autoLayout } from '../views/autoLayout';
 import { createNode, createProject } from '../model/factory';
@@ -17,6 +18,8 @@ import type {
   CustomKind,
   DesignOrder,
   EdgeKind,
+  Gdd,
+  GddSection,
   GameEdge,
   GameNode,
   NodeKind,
@@ -49,6 +52,16 @@ type ProjectState = {
   setProjectName: (name: string) => void;
   setDesignOrder: (order: DesignOrder) => void;
   setCoreOnly: (on: boolean) => void;
+
+  /** Replaces the whole written document. */
+  setGdd: (gdd: Gdd) => void;
+  setGddValue: (fieldId: string, value: string) => void;
+  setGddEnabled: (groupId: string, on: boolean) => void;
+  addCustomSection: () => string;
+  /** Adds pillar nodes to the main graph, below what is already there. Returns how many. */
+  addPillarNodes: (titles: string[]) => number;
+  updateCustomSection: (id: string, patch: Partial<Omit<GddSection, 'id'>>) => void;
+  removeCustomSection: (id: string) => void;
 
   setActiveGraph: (graphId: string) => void;
   /** Goes inside a node, creating its inner graph the first time. */
@@ -151,6 +164,57 @@ export const useProjectStore = create<ProjectState>()((set, get) => {
     setProjectName: (name) => commit({ ...get().project, name }, { coalesce: 'project-name' }),
     setDesignOrder: (designOrder) => commit({ ...get().project, designOrder }),
     setCoreOnly: (coreOnly) => commit({ ...get().project, coreOnly }),
+
+    setGdd: (gdd) => commit({ ...get().project, gdd }),
+
+    setGddValue: (fieldId, value) => {
+      const { project } = get();
+      const gdd = project.gdd ?? emptyGdd();
+      commit(
+        { ...project, gdd: { ...gdd, values: { ...gdd.values, [fieldId]: value } } },
+        { coalesce: `gdd:${fieldId}` },
+      );
+    },
+
+    setGddEnabled: (groupId, on) => {
+      const { project } = get();
+      const gdd = project.gdd ?? emptyGdd();
+      commit({ ...project, gdd: { ...gdd, enabled: { ...gdd.enabled, [groupId]: on } } });
+    },
+
+    addCustomSection: () => {
+      const { project } = get();
+      const gdd = project.gdd ?? emptyGdd();
+      const id = newId('c');
+      commit({ ...project, gdd: { ...gdd, custom: [...gdd.custom, { id, title: '', body: '' }] } });
+      return id;
+    },
+
+    addPillarNodes: (titles) => {
+      if (titles.length === 0) return 0;
+      const { project } = get();
+      const root = project.graphs[project.rootGraphId];
+      if (!root) return 0;
+      const y = root.nodes.length > 0 ? Math.max(...root.nodes.map((n) => n.position.y)) + 200 : 0;
+      const nodes = titles.map((title, i) =>
+        createNode('pillar', { x: i * 260, y }, project.customKinds, { title }),
+      );
+      commit(updateGraph(project, root.id, (g) => ({ ...g, nodes: [...g.nodes, ...nodes] })));
+      return nodes.length;
+    },
+
+    updateCustomSection: (id, patch) => {
+      const { project } = get();
+      const gdd = project.gdd ?? emptyGdd();
+      const custom = gdd.custom.map((c) => (c.id === id ? { ...c, ...patch } : c));
+      commit({ ...project, gdd: { ...gdd, custom } }, { coalesce: `gdd-custom:${id}` });
+    },
+
+    removeCustomSection: (id) => {
+      const { project } = get();
+      const gdd = project.gdd ?? emptyGdd();
+      commit({ ...project, gdd: { ...gdd, custom: gdd.custom.filter((c) => c.id !== id) } });
+    },
 
     setActiveGraph: (graphId) => {
       if (get().project.graphs[graphId]) set({ activeGraphId: graphId });

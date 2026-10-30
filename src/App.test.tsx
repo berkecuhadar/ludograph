@@ -32,6 +32,7 @@ let host: HTMLElement | undefined;
 
 afterEach(() => {
   act(() => root?.unmount());
+  useUiStore.setState({ mode: 'graph', dialog: null, view: 'graph' });
   host?.remove();
   root = undefined;
   host = undefined;
@@ -122,5 +123,53 @@ describe('App', () => {
     const back = el.querySelector<HTMLButtonElement>('.breadcrumb button');
     act(() => back?.click());
     expect(useProjectStore.getState().activeGraphId).toBe(project.rootGraphId);
+  });
+
+  it('switches to the document and back without losing either', () => {
+    useProjectStore.getState().loadProject(sample().project);
+    const el = mount();
+    act(() => useUiStore.getState().setMode('document'));
+    expect(el.querySelector('.doc-view')).not.toBeNull();
+    expect(el.querySelector('.canvas')).toBeNull();
+    expect(el.querySelector('.doc-preview h1')?.textContent).toBe('Sample game');
+
+    act(() => useProjectStore.getState().setGddValue('title', 'Cloud Keeper'));
+    act(() => useProjectStore.getState().setGddValue('pillars', 'Calm. Curious.'));
+    expect(el.querySelector('.doc-preview h1')?.textContent).toBe('Cloud Keeper');
+    expect(el.querySelectorAll('.doc-pillars li')).toHaveLength(2);
+
+    act(() => useUiStore.getState().setMode('graph'));
+    expect(el.querySelector('.canvas')).not.toBeNull();
+    expect(el.querySelector('.doc-view')).toBeNull();
+    expect(useProjectStore.getState().project.gdd?.values.title).toBe('Cloud Keeper');
+  });
+
+  it('shows the fields of an optional section only when it is switched on', () => {
+    useProjectStore.getState().loadProject(createProject('Docs'));
+    const el = mount();
+    act(() => useUiStore.getState().setMode('document'));
+    expect(el.textContent).not.toContain('Backstory and universe');
+    const box = [...el.querySelectorAll<HTMLInputElement>('.doc-question input')][0];
+    act(() => box?.click());
+    expect(useProjectStore.getState().project.gdd?.enabled.story).toBe(true);
+    expect(el.textContent).toContain('Backstory and universe');
+    expect(el.querySelector('.doc-preview')?.textContent).toContain('Backstory and universe');
+  });
+
+  it('opens the templates dialog and offers the three templates', () => {
+    useProjectStore.getState().loadProject(createProject('Docs'));
+    const el = mount();
+    act(() => useUiStore.getState().setMode('document'));
+    act(() => useUiStore.getState().setDialog('templates'));
+    expect(el.querySelectorAll('.templates li')).toHaveLength(3);
+  });
+
+  it('offers a button to pull text from the graph next to the fields that can have it', () => {
+    useProjectStore.getState().loadProject(sample().project);
+    const el = mount();
+    act(() => useUiStore.getState().setMode('document'));
+    const buttons = [...el.querySelectorAll('.doc-field-tools button')].map((b) => b.textContent);
+    expect(buttons).toContain('From graph');
+    expect(buttons).toContain('Create pillar nodes');
   });
 });

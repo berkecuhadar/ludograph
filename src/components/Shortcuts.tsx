@@ -49,6 +49,8 @@ export function Shortcuts() {
       if (isTypingTarget(e.target) || useUiStore.getState().dialog) return;
       const action = matchShortcut(e);
       if (!action) return;
+      // The document view has no canvas to act on, so only the help list works there.
+      if (useUiStore.getState().mode === 'document' && action !== 'help') return;
       if (action === 'openInside' && !isCanvasTarget(e.target)) return;
       e.preventDefault();
       run(action);

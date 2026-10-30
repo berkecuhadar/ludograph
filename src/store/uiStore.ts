@@ -4,9 +4,10 @@ import type { EdgeKind } from '../model/types';
 import type { Filter } from '../views/display';
 
 export type DialogName =
-  'quickAdd' | 'help' | 'settings' | 'connect' | 'search' | 'errors' | 'confirm';
+  'quickAdd' | 'help' | 'settings' | 'connect' | 'search' | 'errors' | 'confirm' | 'templates';
 
 export type ViewName = 'graph' | 'onion' | 'mda';
+export type AppMode = 'graph' | 'document';
 export type SidebarTab = 'inspector' | 'path' | 'validation';
 
 // Asks the canvas to select exactly these nodes. A new object each time, so
@@ -25,6 +26,8 @@ type UiState = {
   focusRequest: FocusRequest | null;
   dialog: DialogName | null;
 
+  /** Graph editor or the written document. */
+  mode: AppMode;
   view: ViewName;
   sidebarTab: SidebarTab;
   sidebarOpen: boolean;
@@ -45,6 +48,7 @@ type UiState = {
   requestSelect: (ids: string[]) => void;
   requestFocus: (nodeId: string) => void;
   setDialog: (dialog: DialogName | null) => void;
+  setMode: (mode: AppMode) => void;
   setView: (view: ViewName) => void;
   setSidebarTab: (tab: SidebarTab) => void;
   setSidebarOpen: (open: boolean) => void;
@@ -73,6 +77,7 @@ export const useUiStore = create<UiState>()((set, get) => ({
   focusRequest: null,
   dialog: null,
 
+  mode: 'graph',
   view: 'graph',
   sidebarTab: 'inspector',
   sidebarOpen: true,
@@ -94,6 +99,7 @@ export const useUiStore = create<UiState>()((set, get) => ({
   requestSelect: (ids) => set({ selectRequest: { ids } }),
   requestFocus: (nodeId) => set({ focusRequest: { nodeId } }),
   setDialog: (dialog) => set({ dialog }),
+  setMode: (mode) => set({ mode }),
   setView: (view) => set({ view }),
   setSidebarTab: (sidebarTab) => set({ sidebarTab, sidebarOpen: true }),
   setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),

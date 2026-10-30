@@ -1,6 +1,8 @@
 import { ReactFlowProvider } from '@xyflow/react';
 import { Breadcrumb } from './components/Breadcrumb';
 import { Canvas } from './components/Canvas';
+import { DocumentView } from './components/document/DocumentView';
+import { TemplatesDialog } from './components/document/TemplatesDialog';
 import { ConfirmDialog } from './components/ConfirmDialog';
 import { ConnectDialog } from './components/ConnectDialog';
 import { ErrorsDialog } from './components/ErrorsDialog';
@@ -21,17 +23,22 @@ export function App() {
   // The canvas is keyed by graph and view, so each one opens fresh and fitted to its content.
   const activeGraphId = useProjectStore((s) => s.activeGraphId);
   const view = useUiStore((s) => s.view);
+  const mode = useUiStore((s) => s.mode);
 
   return (
     <ReactFlowProvider>
       <div className="app">
         <Header />
-        <Breadcrumb />
-        <div className="app-body">
-          <Palette />
-          <Canvas key={`${activeGraphId}:${view}`} />
-          <Sidebar />
-        </div>
+        {mode === 'graph' && <Breadcrumb />}
+        {mode === 'graph' ? (
+          <div className="app-body">
+            <Palette />
+            <Canvas key={`${activeGraphId}:${view}`} />
+            <Sidebar />
+          </div>
+        ) : (
+          <DocumentView />
+        )}
       </div>
       <ValidationRunner />
       <Shortcuts />
@@ -42,6 +49,7 @@ export function App() {
       <ConnectDialog />
       <ConfirmDialog />
       <ErrorsDialog />
+      <TemplatesDialog />
       <Notice />
     </ReactFlowProvider>
   );

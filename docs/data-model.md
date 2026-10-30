@@ -27,6 +27,7 @@ type Project = {
   customKinds: CustomKind[];
   viewPositions?: { onion?: Record<nodeId, Point>; mda?: Record<nodeId, Point> };
   coreOnly?: boolean;
+  gdd?: Gdd; // the written document, see below
 };
 ```
 
@@ -148,6 +149,35 @@ dynamic or aesthetic node, depending on its axis.
 so on). The table lives in one place, [`src/model/edgeRules.ts`](../src/model/edgeRules.ts). Self
 loops and exact duplicates are always refused, with a message that says why.
 
+## Document
+
+Next to the graph a project can hold a written game design document, edited in the **Document**
+view. It is based on [OpenGDD](https://github.com/berkecuhadar/opengdd) and uses the same field and
+section ids, so OpenGDD files can be imported and exported.
+
+```ts
+type Gdd = {
+  values: Record<string, string>; // text per field id: title, mantra, summary, coreLoop ...
+  enabled: Record<string, boolean>; // which optional sections are on: story, risk, economy ...
+  custom: { id: string; title: string; body: string }[]; // sections you add yourself
+};
+```
+
+The one-pager (title, game identity, pillars, summary, genre, audience, core loop, features,
+controls, art, music, roadmap) is always there. Fourteen optional sections each switch on with a
+yes/no question. The field definitions are in [`src/gdd/sections.ts`](../src/gdd/sections.ts), the
+three templates in [`src/gdd/templates.ts`](../src/gdd/templates.ts).
+
+The graph and the document are two separate pieces of data, and nothing syncs them behind your back.
+Instead there are buttons you press:
+
+- **From graph** next to a field fills it with text built from the graph: pillars from pillar nodes,
+  the core loop from the core loop node and what it triggers, audience from personas, story from
+  layer 3, progression from layer 2, rules from rule nodes, interaction from layer 0 mechanics and
+  actions, economy from resource nodes. It asks before replacing text you wrote.
+- **Create pillar nodes** adds a pillar node to the main graph for each pillar in the pillars line
+  that has none.
+
 ## Validation
 
 Pure functions in [`src/validation/`](../src/validation), each with tests. They run on every graph,
@@ -176,7 +206,10 @@ The severities for the rules the original brief left open are a judgment call an
 
 ## Exports
 
-- **Markdown GDD.** Follows `designOrder`: experience and personas first when working outside-in,
+- **Markdown GDD.** With a written document, the file starts with that document (title, game
+  identity, pillars, the one-pager, the sections that are on, your own sections) and continues with
+  the graph under a "Design model" heading. Without one it is only the graph part. The graph part
+  follows `designOrder`: experience and personas first when working outside-in,
   then the layers inwards; the core first otherwise. Each node has its description, a parameter table
   and requires / feeds / conflicts lists. Headings follow the drill-down hierarchy, narrative nodes
   show their content cost, and aesthetics list the mechanics that lead to them. In core-only mode,
@@ -185,3 +218,5 @@ The severities for the rules the original brief left open are a judgment call an
   `JsonUtility` has no null, so a missing layer is `-1` and missing text is `""`; parameter values are
   text with a `valueType`. Sample C# for loading it is in [`examples/unity/`](../examples/unity).
 - **PNG and SVG.** A picture of the current view, fitted to its content.
+- **OpenGDD file.** The Document view exports and imports the version 3 format of OpenGDD. Older
+  (version 2) files are converted on import. Print or save as PDF uses the browser's print dialog.

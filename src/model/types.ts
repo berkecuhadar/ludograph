@@ -121,6 +121,21 @@ export type Graph = {
   edges: GameEdge[];
 };
 
+/** A section you add yourself in the Document view. */
+export type GddSection = { id: string; title: string; body: string };
+
+/**
+ * The written game design document. It is stored next to the graph in the same file.
+ * Field and section ids follow OpenGDD, so its files can be imported.
+ */
+export type Gdd = {
+  /** Text per field id: title, mantra, summary, coreLoop and so on. */
+  values: Record<string, string>;
+  /** Which optional sections are switched on, by section id. */
+  enabled: Record<string, boolean>;
+  custom: GddSection[];
+};
+
 export type DesignOrder = 'outsideIn' | 'coreFirst';
 
 export type Project = {
@@ -136,4 +151,6 @@ export type Project = {
   viewPositions?: Partial<Record<PlacedView, Record<string, Point>>>;
   /** Core-only prototype mode: layers 1 to 3 are marked as deferred. */
   coreOnly?: boolean;
+  /** The written document (Document view). */
+  gdd?: Gdd;
 };
