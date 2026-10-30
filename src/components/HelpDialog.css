@@ -1,0 +1,40 @@
+.help dl {
+  margin: 0;
+}
+
+.help-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: var(--space-3);
+  padding: 3px 0;
+}
+
+.help-row dt,
+.help-row dd {
+  margin: 0;
+}
+
+.help kbd {
+  padding: 1px 6px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.help-note {
+  margin: var(--space-3) 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.help button {
+  padding: 3px var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}

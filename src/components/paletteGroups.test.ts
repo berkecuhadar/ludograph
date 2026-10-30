@@ -1,6 +1,26 @@
 import { describe, expect, it } from 'vitest';
 import { BUILTIN_KINDS } from '../model/types';
-import { paletteGroups } from './paletteGroups';
+import { filterEntries, paletteGroups } from './paletteGroups';
+
+describe('filterEntries', () => {
+  const groups = paletteGroups([]);
+
+  it('returns everything for an empty query', () => {
+    expect(filterEntries(groups, '  ').length).toBeGreaterThan(15);
+  });
+
+  it('matches part of a label, ignoring case', () => {
+    const labels = filterEntries(groups, 'MECH').map((e) => e.label);
+    expect(labels).toContain('Mechanic');
+    expect(labels).toContain('Secondary mechanic');
+    expect(labels).toContain('Sub-mechanic');
+    expect(labels).not.toContain('Pillar');
+  });
+
+  it('returns nothing when there is no match', () => {
+    expect(filterEntries(groups, 'zzz')).toEqual([]);
+  });
+});
 
 describe('paletteGroups', () => {
   it('offers every built-in kind', () => {

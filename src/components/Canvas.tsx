@@ -23,16 +23,25 @@ const DELETE_KEYS = ['Backspace', 'Delete'];
 
 // Rebuild React Flow's nodes from the graph, keeping what it tracks itself
 // (measured size, selection, drag state) for nodes that already exist.
-function toFlowNodes(graph: Graph | undefined, prev: GameFlowNode[]): GameFlowNode[] {
+// When `select` is given, exactly those nodes end up selected.
+function toFlowNodes(
+  graph: Graph | undefined,
+  prev: GameFlowNode[],
+  select?: ReadonlySet<string>,
+): GameFlowNode[] {
   if (!graph) return [];
   const old = new Map(prev.map((n) => [n.id, n]));
-  return graph.nodes.map((n) => ({
-    ...old.get(n.id),
-    id: n.id,
-    type: 'game',
-    position: n.position,
-    data: { node: n },
-  }));
+  return graph.nodes.map((n) => {
+    const node: GameFlowNode = {
+      ...old.get(n.id),
+      id: n.id,
+      type: 'game',
+      position: n.position,
+      data: { node: n },
+    };
+    if (select) node.selected = select.has(n.id);
+    return node;
+  });
 }
 
 function toFlowEdges(graph: Graph | undefined, prev: Edge[]): Edge[] {
@@ -54,15 +63,20 @@ export function Canvas() {
   const removeEdges = useProjectStore((s) => s.removeEdges);
   const addEdge = useProjectStore((s) => s.addEdge);
   const setSelection = useUiStore((s) => s.setSelection);
+  const selectRequest = useUiStore((s) => s.selectRequest);
 
   // React Flow keeps its own copy (measured sizes, selection, drag state).
   // The project store is the source of truth, so we copy from it whenever it changes.
   const [nodes, setNodes] = useState<GameFlowNode[]>(() => toFlowNodes(graph, []));
   const [edges, setEdges] = useState<Edge[]>(() => toFlowEdges(graph, []));
   const [syncedGraph, setSyncedGraph] = useState(graph);
-  if (graph !== syncedGraph) {
+  const [syncedRequest, setSyncedRequest] = useState(selectRequest);
+  if (graph !== syncedGraph || selectRequest !== syncedRequest) {
+    const select =
+      selectRequest !== syncedRequest && selectRequest ? new Set(selectRequest.ids) : undefined;
     setSyncedGraph(graph);
-    setNodes(toFlowNodes(graph, nodes));
+    setSyncedRequest(selectRequest);
+    setNodes(toFlowNodes(graph, nodes, select));
     setEdges(toFlowEdges(graph, edges));
   }
 

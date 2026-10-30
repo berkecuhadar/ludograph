@@ -1,0 +1,32 @@
+.quickadd input {
+  width: 100%;
+  padding: 6px var(--space-2);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font: inherit;
+}
+
+.quickadd-list {
+  max-height: 320px;
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.quickadd-list li {
+  padding: 5px var(--space-2);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.quickadd-list li[aria-selected='true'] {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.quickadd-list .quickadd-empty {
+  color: var(--text-muted);
+  cursor: default;
+}

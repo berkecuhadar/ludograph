@@ -12,6 +12,13 @@ export type PaletteGroup = { id: string; label: string; entries: PaletteEntry[] 
 
 const entry = (kind: NodeKind, label: string): PaletteEntry => ({ id: kind, label, kind });
 
+export function filterEntries(groups: PaletteGroup[], query: string): PaletteEntry[] {
+  const needle = query.trim().toLowerCase();
+  const all = groups.flatMap((g) => g.entries);
+  if (!needle) return all;
+  return all.filter((e) => e.label.toLowerCase().includes(needle));
+}
+
 export function paletteGroups(customKinds: CustomKind[]): PaletteGroup[] {
   const k = strings.kinds;
   const g = strings.palette.groups;

@@ -12,6 +12,31 @@ export const strings = {
   header: {
     undo: 'Undo',
     redo: 'Redo',
+    help: 'Shortcuts',
+  },
+  quickAdd: {
+    title: 'Add node',
+    placeholder: 'Search node kinds',
+    empty: 'No matching kind',
+  },
+  help: {
+    title: 'Keyboard shortcuts',
+    close: 'Close',
+    note: 'On Mac, use Cmd instead of Ctrl.',
+    shortcuts: [
+      { keys: 'N', label: 'Add a node' },
+      { keys: '? or key left of 1', label: 'Show this list' },
+      { keys: 'Ctrl+Z', label: 'Undo' },
+      { keys: 'Ctrl+Shift+Z', label: 'Redo (also Ctrl+Y)' },
+      { keys: 'Ctrl+C', label: 'Copy selected nodes' },
+      { keys: 'Ctrl+V', label: 'Paste' },
+      { keys: 'Ctrl+D', label: 'Duplicate selected nodes' },
+      { keys: 'Ctrl+A', label: 'Select all nodes' },
+      { keys: 'Delete', label: 'Delete selection (also Backspace)' },
+      { keys: 'Ctrl+click', label: 'Add to selection' },
+      { keys: 'Shift+drag', label: 'Box select' },
+      { keys: 'Esc', label: 'Close a dialog' },
+    ],
   },
   palette: {
     title: 'Add node',
