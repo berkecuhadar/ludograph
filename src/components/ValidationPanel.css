@@ -1,0 +1,95 @@
+.validation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.validation .hint {
+  margin: 0;
+  font-size: 12px;
+}
+
+.validation-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.validation-filters button {
+  padding: 2px var(--space-2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.validation-filters button[aria-pressed='false'] {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.issues {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.issues button {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  border-radius: var(--radius);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.issues button:hover {
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.issues li[data-severity='error'] button {
+  border-left-color: var(--danger);
+}
+
+.issues li[data-severity='warning'] button {
+  border-left-color: hsl(35 90% 48%);
+}
+
+.issues li[data-severity='info'] button {
+  border-left-color: hsl(210 50% 55%);
+}
+
+.issue-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.issue-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.issue-meta {
+  font-size: 11px;
+}

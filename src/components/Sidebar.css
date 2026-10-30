@@ -63,3 +63,12 @@
   font: inherit;
   cursor: pointer;
 }
+
+.tab-badge {
+  margin-left: var(--space-1);
+  padding: 0 6px;
+  background: color-mix(in srgb, var(--text) 12%, transparent);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}

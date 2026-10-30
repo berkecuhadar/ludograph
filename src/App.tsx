@@ -12,6 +12,7 @@ import { SearchDialog } from './components/SearchDialog';
 import { SettingsDialog } from './components/settings/SettingsDialog';
 import { Shortcuts } from './components/Shortcuts';
 import { Sidebar } from './components/Sidebar';
+import { ValidationRunner } from './components/ValidationRunner';
 import { useProjectStore } from './store/projectStore';
 import { useUiStore } from './store/uiStore';
 
@@ -31,6 +32,7 @@ export function App() {
           <Sidebar />
         </div>
       </div>
+      <ValidationRunner />
       <Shortcuts />
       <QuickAdd />
       <SearchDialog />

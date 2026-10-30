@@ -30,6 +30,68 @@ export const strings = {
     collapse: 'Hide panel',
     expand: 'Show panel',
   },
+  validation: {
+    title: 'Validation',
+    none: 'No issues found.',
+    graphLevel: 'Whole graph',
+    inGraph: (name: string) => `in ${name}`,
+    severity: { error: 'Errors', warning: 'Warnings', info: 'Notes' },
+    onionOff: 'The onion layer rule is switched off in settings.',
+    rules: {
+      onionHeuristic: 'Onion layer dependency',
+      vagueExperience: 'Vague experience',
+      personaWithoutOcean: 'Persona without OCEAN',
+      unestimatedNarrative: 'Unestimated narrative',
+      unscopedOuterLayer: 'Unscoped outer layer',
+      secondaryWithoutHook: 'No return hook',
+      emptyCore: 'Empty core',
+      heavyCore: 'Heavy core',
+      orphan: 'Orphan node',
+      requiresCycle: 'Requires cycle',
+      danglingMechanic: 'Dangling mechanic',
+      unsupportedAesthetic: 'Unsupported aesthetic',
+      coreLoopFlow: 'Core loop flow',
+      resourceFlow: 'Resource flow',
+      implementedRequiresIdea: 'Implemented needs unfinished',
+      duplicateTitle: 'Duplicate title',
+    },
+    messages: {
+      onionHeuristic: (from: string, fromLayer: number, to: string, toLayer: number) =>
+        `"${from}" (layer ${fromLayer}) requires "${to}" (layer ${toLayer}), which sits in a more outer layer. An inner layer should still work without the outer ones.`,
+      vagueExperience: (title: string) =>
+        `The aesthetic "${title}" is described in under 30 characters. State the feeling concretely: who feels what, and when.`,
+      personaWithoutOcean: (title: string, missing: string) =>
+        `Persona "${title}" has no values for: ${missing}.`,
+      unestimatedNarrative: (title: string) =>
+        `Narrative "${title}" has no content cost. Content is expensive, so estimate its size early.`,
+      unscopedOuterLayer: (title: string, layer: number) =>
+        `"${title}" (layer ${layer}) has no prototype scope. Decide whether the prototype builds it fully, stubs it or skips it.`,
+      secondaryWithoutHook: (title: string) =>
+        `"${title}" is a secondary mechanic without a return hook. Why does the player come back for it?`,
+      emptyCore: 'This graph has mechanics but nothing in layer 0, the core mechanic.',
+      heavyCore: (count: number, limit: number) =>
+        `Layer 0 has ${count} mechanic and action nodes (the limit is ${limit}). A core mechanic is usually small. Check whether some of these belong in another layer or inside a drill-down.`,
+      orphan: (title: string) => `"${title}" is not connected to anything.`,
+      requiresCycle: (titles: string) => `These nodes require each other in a loop: ${titles}.`,
+      danglingMechanic: (title: string) =>
+        `"${title}" does not lead to any dynamic or aesthetic. Connect it with "leads to", or reconsider it.`,
+      unsupportedAesthetic: (title: string, kind: string) =>
+        `No mechanic reaches the ${kind} "${title}". Something has to make it happen.`,
+      coreLoopFlowIn: (title: string) =>
+        `Core loop "${title}" has nothing that feeds or triggers it.`,
+      coreLoopFlowOut: (title: string) => `Core loop "${title}" does not feed or trigger anything.`,
+      coreLoopFlowBoth: (title: string) =>
+        `Core loop "${title}" has nothing feeding or triggering it, and does not feed or trigger anything.`,
+      resourceNeverProduced: (title: string) =>
+        `Resource "${title}" is never produced. Add a source, or a "feeds" edge into it.`,
+      resourceNeverConsumed: (title: string) =>
+        `Resource "${title}" is never consumed. Add a sink, or a "feeds" edge out of it.`,
+      implementedRequiresIdea: (from: string, to: string, status: string) =>
+        `"${from}" is implemented but requires "${to}", which is only ${status}.`,
+      duplicateTitle: (title: string, count: number) =>
+        `${count} nodes in this graph are called "${title}".`,
+    },
+  },
   views: {
     label: 'View',
     graph: 'Graph',

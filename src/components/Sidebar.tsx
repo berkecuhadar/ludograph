@@ -1,10 +1,12 @@
 import { strings } from '../lib/strings';
 import { useUiStore, type SidebarTab } from '../store/uiStore';
+import { useValidationStore } from '../store/validationStore';
 import { DesignPathPanel } from './DesignPathPanel';
 import { Inspector } from './inspector/Inspector';
+import { ValidationPanel } from './ValidationPanel';
 import './Sidebar.css';
 
-const TABS: SidebarTab[] = ['inspector', 'path'];
+const TABS: SidebarTab[] = ['inspector', 'path', 'validation'];
 
 export function Sidebar() {
   const open = useUiStore((s) => s.sidebarOpen);
@@ -12,6 +14,7 @@ export function Sidebar() {
   const tab = useUiStore((s) => s.sidebarTab);
   const setTab = useUiStore((s) => s.setSidebarTab);
   const t = strings.sidebar;
+  const issueCount = useValidationStore((s) => s.issues.length);
 
   if (!open) {
     return (
@@ -36,6 +39,9 @@ export function Sidebar() {
               onClick={() => setTab(id)}
             >
               {t[id]}
+              {id === 'validation' && issueCount > 0 && (
+                <span className="tab-badge">{issueCount}</span>
+              )}
             </button>
           ))}
         </div>
@@ -51,6 +57,7 @@ export function Sidebar() {
       <div className="sidebar-body" role="tabpanel">
         {tab === 'inspector' && <Inspector />}
         {tab === 'path' && <DesignPathPanel />}
+        {tab === 'validation' && <ValidationPanel />}
       </div>
     </aside>
   );
