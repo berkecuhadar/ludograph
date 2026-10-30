@@ -69,6 +69,13 @@ body {
 }
 
 .canvas {
+  position: relative;
   min-width: 0;
   min-height: 0;
+  background: var(--bg);
+}
+
+/* The rings and lanes are drawn behind React Flow, so it must be see-through. */
+.canvas .react-flow {
+  background: transparent;
 }

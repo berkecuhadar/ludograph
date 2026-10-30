@@ -1,11 +1,16 @@
 import { strings } from '../lib/strings';
-import { useUiStore } from '../store/uiStore';
+import { useUiStore, type SidebarTab } from '../store/uiStore';
+import { DesignPathPanel } from './DesignPathPanel';
 import { Inspector } from './inspector/Inspector';
 import './Sidebar.css';
+
+const TABS: SidebarTab[] = ['inspector', 'path'];
 
 export function Sidebar() {
   const open = useUiStore((s) => s.sidebarOpen);
   const setOpen = useUiStore((s) => s.setSidebarOpen);
+  const tab = useUiStore((s) => s.sidebarTab);
+  const setTab = useUiStore((s) => s.setSidebarTab);
   const t = strings.sidebar;
 
   if (!open) {
@@ -19,9 +24,21 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="sidebar" aria-label={t.inspector}>
+    <aside className="sidebar" aria-label="Side panel">
       <div className="sidebar-head">
-        <strong>{t.inspector}</strong>
+        <div className="sidebar-tabs" role="tablist">
+          {TABS.map((id) => (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              aria-selected={tab === id}
+              onClick={() => setTab(id)}
+            >
+              {t[id]}
+            </button>
+          ))}
+        </div>
         <button
           type="button"
           onClick={() => setOpen(false)}
@@ -31,8 +48,9 @@ export function Sidebar() {
           &raquo;
         </button>
       </div>
-      <div className="sidebar-body">
-        <Inspector />
+      <div className="sidebar-body" role="tabpanel">
+        {tab === 'inspector' && <Inspector />}
+        {tab === 'path' && <DesignPathPanel />}
       </div>
     </aside>
   );

@@ -30,3 +30,36 @@
   padding: var(--space-3);
   overflow-y: auto;
 }
+
+.sidebar-tabs {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.sidebar-tabs button {
+  padding: 2px var(--space-3);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.sidebar-tabs button[aria-selected='true'] {
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+  border-color: var(--border);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.sidebar-head > button,
+.sidebar-collapsed button {
+  padding: 2px var(--space-2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}

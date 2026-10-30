@@ -5,6 +5,7 @@ import { findCustomKind, isCustomKind, kindLabel } from '../model/kinds';
 import type { GameNode, Mda } from '../model/types';
 import { useProjectStore } from '../store/projectStore';
 import { KIND_HUE } from './kindHue';
+import { useNodeDisplay } from './displayContext';
 import { KindIcon } from './KindIcon';
 import './GameNodeView.css';
 
@@ -38,6 +39,7 @@ export const GameNodeView = memo(function GameNodeView({
   const insideCount = useProjectStore((s) =>
     node.childGraphId ? s.project.graphs[node.childGraphId]?.nodes.length : undefined,
   );
+  const { dimmed, deferred } = useNodeDisplay(node.id);
   const custom = isCustomKind(node.kind) ? findCustomKind(node.kind, customKinds) : undefined;
 
   const style: CSSProperties = {};
@@ -51,7 +53,14 @@ export const GameNodeView = memo(function GameNodeView({
   const layerLabel = node.layer === undefined ? null : strings.layers[node.layer];
 
   return (
-    <div className="gnode" data-selected={selected} data-status={node.status} style={style}>
+    <div
+      className="gnode"
+      data-selected={selected}
+      data-status={node.status}
+      data-dim={dimmed}
+      data-deferred={deferred}
+      style={style}
+    >
       <Handle type="target" position={Position.Left} />
       <div className="gnode-top">
         <span className="gnode-kind">
@@ -70,6 +79,7 @@ export const GameNodeView = memo(function GameNodeView({
       <div className="gnode-title">{node.title || ' '}</div>
       <div className="gnode-bottom">
         <span className="gnode-status">{strings.status[node.status]}</span>
+        {deferred && <span className="gnode-deferred">{strings.designPath.deferred}</span>}
         {insideCount !== undefined && (
           <span className="gnode-inside" title={strings.breadcrumb.openInside}>
             {strings.breadcrumb.inside(insideCount)}

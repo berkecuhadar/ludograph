@@ -19,6 +19,18 @@
   --accent: #2f6fd1;
   --focus: #2f6fd1;
   --danger: #b3261e;
+
+  /* Onion rings, from the core outwards: green, yellow, blue, pink-red. */
+  --ring-0: hsl(135 40% 55% / 0.22);
+  --ring-1: hsl(48 85% 55% / 0.22);
+  --ring-2: hsl(213 65% 60% / 0.2);
+  --ring-3: hsl(352 65% 62% / 0.2);
+  --ring-line: hsl(0 0% 50% / 0.35);
+
+  /* MDA lanes, deliberately quiet. */
+  --lane-mechanics: hsl(210 20% 50% / 0.1);
+  --lane-dynamics: hsl(40 30% 50% / 0.1);
+  --lane-aesthetics: hsl(330 25% 50% / 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -31,5 +43,15 @@
     --accent: #6ea0f2;
     --focus: #6ea0f2;
     --danger: #f2867f;
+
+    --ring-0: hsl(135 35% 50% / 0.2);
+    --ring-1: hsl(48 70% 50% / 0.18);
+    --ring-2: hsl(213 60% 58% / 0.2);
+    --ring-3: hsl(352 55% 58% / 0.2);
+    --ring-line: hsl(0 0% 60% / 0.35);
+
+    --lane-mechanics: hsl(210 25% 60% / 0.12);
+    --lane-dynamics: hsl(40 35% 60% / 0.12);
+    --lane-aesthetics: hsl(330 30% 60% / 0.12);
   }
 }

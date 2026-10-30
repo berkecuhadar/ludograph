@@ -55,6 +55,8 @@ type ProjectState = {
 
   addNode: (kind: NodeKind, position: Point, overrides?: Partial<GameNode>) => string;
   updateNode: (id: string, patch: Partial<GameNode>, options?: EditOptions) => void;
+  /** Changes several nodes in one undo step. */
+  updateNodes: (patches: Record<string, Partial<GameNode>>) => void;
   moveNodes: (positions: Record<string, Point>) => void;
   setViewPositions: (view: PlacedView, positions: Record<string, Point>) => void;
   removeNodes: (ids: string[]) => void;
@@ -170,6 +172,15 @@ export const useProjectStore = create<ProjectState>()((set, get) => {
         (g) => ({ ...g, nodes: g.nodes.map((n) => (n.id === id ? patchNode(n, patch) : n)) }),
         options,
       ),
+
+    updateNodes: (patches) =>
+      editGraph((g) => ({
+        ...g,
+        nodes: g.nodes.map((n) => {
+          const patch = patches[n.id];
+          return patch ? patchNode(n, patch) : n;
+        }),
+      })),
 
     moveNodes: (positions) =>
       editGraph(

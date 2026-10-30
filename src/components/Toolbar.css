@@ -1,0 +1,100 @@
+.canvas-toolbar {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.segmented {
+  display: inline-flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.segmented button {
+  padding: 3px var(--space-3);
+  background: transparent;
+  border: 0;
+  border-right: 1px solid var(--border);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.segmented button:last-child {
+  border-right: 0;
+}
+
+.segmented button[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+  font-weight: 600;
+}
+
+.filter {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 13px;
+}
+
+.filter summary {
+  padding: 3px var(--space-3);
+  cursor: pointer;
+}
+
+.filter summary[data-active='true'] {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.filter-body {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 240px;
+  padding: var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.18);
+}
+
+.filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.filter-body button,
+.filter-body select {
+  padding: 2px var(--space-2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.filter-body button[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--accent) 20%, var(--surface));
+  border-color: var(--accent);
+}
+
+.filter-body button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.filter-tag {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}

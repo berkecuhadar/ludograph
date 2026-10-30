@@ -1,5 +1,7 @@
 import { create } from 'zustand';
-import type { EdgeKind, Status } from '../model/types';
+import type { StepId } from '../designPath/steps';
+import type { EdgeKind } from '../model/types';
+import type { Filter } from '../views/display';
 
 export type DialogName =
   'quickAdd' | 'help' | 'settings' | 'connect' | 'search' | 'errors' | 'confirm';
@@ -16,8 +18,6 @@ export type FocusRequest = { nodeId: string };
 
 export type PendingConnection = { source: string; target: string };
 
-export type Filter = { statuses: Status[]; tag: string | null };
-
 type UiState = {
   selectedNodeIds: string[];
   selectedEdgeIds: string[];
@@ -29,8 +29,11 @@ type UiState = {
   sidebarTab: SidebarTab;
   sidebarOpen: boolean;
   /** Design Path step the canvas is narrowed to. */
-  pathStep: string | null;
+  pathStep: StepId | null;
   filter: Filter;
+
+  /** Nodes being dragged in the Onion or MDA view right now. */
+  draggingIds: string[];
 
   pendingConnection: PendingConnection | null;
   lastEdgeKind: EdgeKind;
@@ -45,8 +48,9 @@ type UiState = {
   setView: (view: ViewName) => void;
   setSidebarTab: (tab: SidebarTab) => void;
   setSidebarOpen: (open: boolean) => void;
-  setPathStep: (step: string | null) => void;
+  setPathStep: (step: StepId | null) => void;
   setFilter: (filter: Filter) => void;
+  setDraggingIds: (ids: string[]) => void;
   startConnect: (connection: PendingConnection) => void;
   setLastEdgeKind: (kind: EdgeKind) => void;
   notify: (text: string) => void;
@@ -75,6 +79,7 @@ export const useUiStore = create<UiState>()((set, get) => ({
   pathStep: null,
   filter: { statuses: [], tag: null },
 
+  draggingIds: [],
   pendingConnection: null,
   lastEdgeKind: 'feeds',
   notice: null,
@@ -94,6 +99,7 @@ export const useUiStore = create<UiState>()((set, get) => ({
   setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),
   setPathStep: (pathStep) => set({ pathStep }),
   setFilter: (filter) => set({ filter }),
+  setDraggingIds: (draggingIds) => set({ draggingIds }),
   startConnect: (pendingConnection) => set({ pendingConnection, dialog: 'connect' }),
   setLastEdgeKind: (lastEdgeKind) => set({ lastEdgeKind }),
   notify: (text) => set({ notice: { id: ++noticeCounter, text } }),

@@ -30,6 +30,75 @@ export const strings = {
     collapse: 'Hide panel',
     expand: 'Show panel',
   },
+  views: {
+    label: 'View',
+    graph: 'Graph',
+    onion: 'Onion',
+    mda: 'MDA',
+    noLayer: 'No layer',
+    hint: {
+      graph: 'Free layout',
+      onion: 'Drag a node into a ring to change its layer',
+      mda: 'Drag a node into a lane to change its MDA axis',
+    },
+  },
+  filter: {
+    title: 'Filter',
+    status: 'Status',
+    tag: 'Tag',
+    anyTag: 'Any tag',
+    clear: 'Clear filter',
+    active: 'Filter on',
+  },
+  designPath: {
+    title: 'Design path',
+    order: 'Working order',
+    orders: { outsideIn: 'Outside-in', coreFirst: 'Core-first' },
+    orderHints: {
+      outsideIn:
+        'Start from the experience you want players to have and work inwards, ending at the core mechanic. Usually the better order.',
+      coreFirst:
+        'For a genuinely new core mechanic: prototype and playtest only the core first, then add outer layers carefully.',
+    },
+    coreOnly: 'Core-only prototype',
+    coreOnlyHint:
+      'Dims layers 1 to 3 and marks them as deferred. The Markdown export labels them too.',
+    deferred: 'Deferred',
+    stepLabels: {
+      experience: 'Experience',
+      personas: 'Personas',
+      narrative: 'Narrative (layer 3)',
+      progression: 'Progression (layer 2)',
+      secondary: 'Secondary mechanic (layer 1)',
+      core: 'Core mechanic (layer 0)',
+    },
+    check: 'check',
+    focus: 'Show only this step',
+    unfocus: 'Show everything',
+    complete: 'Nothing obviously missing',
+    notes: {
+      empty: {
+        experience:
+          'Nothing yet. Say which feelings you want players to have, as concretely as you can.',
+        personas: 'Nothing yet. Describe who plays, using the five OCEAN traits.',
+        narrative:
+          'Nothing yet. Decide the story with the team and estimate its content size early.',
+        progression:
+          'Nothing yet. Derive it from the narrative and challenge each answer for scope.',
+        secondary: 'Nothing yet. What makes players come back while they are not playing?',
+        core: 'Nothing yet. The action players repeat, and the loop around it.',
+      },
+      experience: (aesthetics: number, pillars: number) =>
+        `${aesthetics} aesthetic${aesthetics === 1 ? '' : 's'}, ${pillars} pillar${pillars === 1 ? '' : 's'}`,
+      personas: (n: number) => `${n} persona${n === 1 ? '' : 's'}`,
+      nodes: (n: number) => `${n} node${n === 1 ? '' : 's'}`,
+      vague: (n: number) => `${n} with a vague description`,
+      missingOcean: (n: number) => `${n} missing OCEAN values`,
+      noCost: (n: number) => `${n} without content cost`,
+      noScope: (n: number) => `${n} without prototype scope`,
+      noHook: (n: number) => `${n} without return hook`,
+    },
+  },
   breadcrumb: {
     label: 'Graph path',
     inside: (count: number) => `${count} inside`,

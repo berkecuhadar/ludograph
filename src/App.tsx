@@ -13,10 +13,12 @@ import { SettingsDialog } from './components/settings/SettingsDialog';
 import { Shortcuts } from './components/Shortcuts';
 import { Sidebar } from './components/Sidebar';
 import { useProjectStore } from './store/projectStore';
+import { useUiStore } from './store/uiStore';
 
 export function App() {
-  // The canvas is keyed by graph so every graph opens fresh and fitted to its content.
+  // The canvas is keyed by graph and view, so each one opens fresh and fitted to its content.
   const activeGraphId = useProjectStore((s) => s.activeGraphId);
+  const view = useUiStore((s) => s.view);
 
   return (
     <ReactFlowProvider>
@@ -25,7 +27,7 @@ export function App() {
         <Breadcrumb />
         <div className="app-body">
           <Palette />
-          <Canvas key={activeGraphId} />
+          <Canvas key={`${activeGraphId}:${view}`} />
           <Sidebar />
         </div>
       </div>
