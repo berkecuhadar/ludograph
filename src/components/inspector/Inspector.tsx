@@ -1,26 +1,37 @@
 import { strings } from '../../lib/strings';
 import { useProjectStore } from '../../store/projectStore';
 import { useUiStore } from '../../store/uiStore';
+import { EdgeInspector } from './EdgeInspector';
 import { NodeInspector } from './NodeInspector';
 import './Inspector.css';
 
 export function Inspector() {
-  const nodes = useProjectStore((s) => s.project.graphs[s.activeGraphId]?.nodes);
-  const selectedIds = useUiStore((s) => s.selectedNodeIds);
+  const graph = useProjectStore((s) => s.project.graphs[s.activeGraphId]);
+  const selectedNodeIds = useUiStore((s) => s.selectedNodeIds);
+  const selectedEdgeIds = useUiStore((s) => s.selectedEdgeIds);
   const t = strings.inspector;
 
-  const selected =
-    selectedIds.length === 1 ? nodes?.find((n) => n.id === selectedIds[0]) : undefined;
+  const node =
+    selectedNodeIds.length === 1
+      ? graph?.nodes.find((n) => n.id === selectedNodeIds[0])
+      : undefined;
+  const edge =
+    !node && selectedNodeIds.length === 0 && selectedEdgeIds.length === 1
+      ? graph?.edges.find((e) => e.id === selectedEdgeIds[0])
+      : undefined;
+
+  // The keys reset local editing state when another item is picked.
+  let body;
+  if (node) body = <NodeInspector key={node.id} node={node} />;
+  else if (edge) body = <EdgeInspector key={edge.id} edge={edge} />;
+  else {
+    const count = selectedNodeIds.length;
+    body = <p className="muted">{count > 1 ? t.multiple(count) : t.empty}</p>;
+  }
 
   return (
-    <aside className="inspector" aria-label={t.title}>
-      <h2 className="inspector-title">{t.title}</h2>
-      {selected ? (
-        // The key resets the local editing state when another node is picked.
-        <NodeInspector key={selected.id} node={selected} />
-      ) : (
-        <p className="muted">{selectedIds.length > 1 ? t.multiple(selectedIds.length) : t.empty}</p>
-      )}
-    </aside>
+    <div className="inspector" aria-label={t.title}>
+      {body}
+    </div>
   );
 }

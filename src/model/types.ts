@@ -3,6 +3,11 @@ export type Mda = (typeof MDA_AXES)[number];
 
 export type Layer = 0 | 1 | 2 | 3;
 
+export type Point = { x: number; y: number };
+
+/** Views that place nodes by their meaning. The free Graph view uses GameNode.position. */
+export type PlacedView = 'onion' | 'mda';
+
 export const BUILTIN_KINDS = [
   'pillar',
   'aesthetic',
@@ -66,7 +71,7 @@ export type GameNode = {
   status: Status;
   tags: string[];
   params: Param[];
-  position: { x: number; y: number };
+  position: Point;
   childGraphId?: string;
 
   aestheticType?: AestheticType;
@@ -127,4 +132,8 @@ export type Project = {
   /** One graph per drill-down level. */
   graphs: Record<string, Graph>;
   customKinds: CustomKind[];
+  /** Where nodes were dragged to in the Onion and MDA views, so the Graph layout stays untouched. */
+  viewPositions?: Partial<Record<PlacedView, Record<string, Point>>>;
+  /** Core-only prototype mode: layers 1 to 3 are marked as deferred. */
+  coreOnly?: boolean;
 };

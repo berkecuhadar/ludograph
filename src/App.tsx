@@ -1,48 +1,42 @@
 import { ReactFlowProvider } from '@xyflow/react';
+import { Breadcrumb } from './components/Breadcrumb';
 import { Canvas } from './components/Canvas';
+import { ConfirmDialog } from './components/ConfirmDialog';
+import { ConnectDialog } from './components/ConnectDialog';
+import { Header } from './components/Header';
 import { HelpDialog } from './components/HelpDialog';
-import { Inspector } from './components/inspector/Inspector';
+import { Notice } from './components/Notice';
 import { Palette } from './components/Palette';
 import { QuickAdd } from './components/QuickAdd';
+import { SearchDialog } from './components/SearchDialog';
+import { SettingsDialog } from './components/settings/SettingsDialog';
 import { Shortcuts } from './components/Shortcuts';
-import { strings } from './lib/strings';
+import { Sidebar } from './components/Sidebar';
 import { useProjectStore } from './store/projectStore';
-import { useUiStore } from './store/uiStore';
 
 export function App() {
-  const projectName = useProjectStore((s) => s.project.name);
-  const canUndo = useProjectStore((s) => s.past.length > 0);
-  const canRedo = useProjectStore((s) => s.future.length > 0);
-  const undo = useProjectStore((s) => s.undo);
-  const redo = useProjectStore((s) => s.redo);
-  const setDialog = useUiStore((s) => s.setDialog);
+  // The canvas is keyed by graph so every graph opens fresh and fitted to its content.
+  const activeGraphId = useProjectStore((s) => s.activeGraphId);
 
   return (
     <ReactFlowProvider>
       <div className="app">
-        <header className="app-header">
-          <strong>{strings.app.name}</strong>
-          <span className="app-project">{projectName}</span>
-          <span className="app-spacer" />
-          <button type="button" onClick={undo} disabled={!canUndo}>
-            {strings.header.undo}
-          </button>
-          <button type="button" onClick={redo} disabled={!canRedo}>
-            {strings.header.redo}
-          </button>
-          <button type="button" onClick={() => setDialog('help')}>
-            {strings.header.help}
-          </button>
-        </header>
+        <Header />
+        <Breadcrumb />
         <div className="app-body">
           <Palette />
-          <Canvas />
-          <Inspector />
+          <Canvas key={activeGraphId} />
+          <Sidebar />
         </div>
       </div>
       <Shortcuts />
       <QuickAdd />
+      <SearchDialog />
       <HelpDialog />
+      <SettingsDialog />
+      <ConnectDialog />
+      <ConfirmDialog />
+      <Notice />
     </ReactFlowProvider>
   );
 }

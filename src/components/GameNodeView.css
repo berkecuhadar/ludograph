@@ -40,6 +40,9 @@
 }
 
 .gnode-kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   color: var(--text-muted);
   font-size: 11px;
   letter-spacing: 0.04em;
@@ -78,5 +81,12 @@
   border-radius: 999px;
   background: color-mix(in srgb, var(--text) 8%, transparent);
   color: var(--text-muted);
+  font-size: 11px;
+}
+
+.gnode-inside {
+  padding: 0 6px;
+  border: 1px solid color-mix(in srgb, var(--node-accent) 50%, var(--border));
+  border-radius: 999px;
   font-size: 11px;
 }

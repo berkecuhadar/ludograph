@@ -46,4 +46,11 @@ describe('matchShortcut', () => {
     expect(press('x', { ctrlKey: true })).toBeNull();
     expect(press('z', { ctrlKey: true, altKey: true })).toBeNull();
   });
+
+  it('maps Enter, Alt+Up and search', () => {
+    expect(press('Enter')).toBe('openInside');
+    expect(press('ArrowUp', { altKey: true })).toBe('goUp');
+    expect(press('/')).toBe('search');
+    expect(press('k', { ctrlKey: true })).toBe('search');
+  });
 });

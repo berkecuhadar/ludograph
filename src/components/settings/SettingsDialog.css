@@ -1,0 +1,61 @@
+.settings-section {
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.settings-section h3 {
+  margin: 0 0 var(--space-2);
+  font-size: 13px;
+}
+
+.settings .hint {
+  margin: var(--space-1) 0 var(--space-3);
+  font-size: 12px;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.kind-list {
+  margin: var(--space-2) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kind-list li {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto auto;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 3px 0;
+}
+
+.kind-name {
+  font-weight: 600;
+}
+
+.kind-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.kind-form input[type='color'] {
+  width: 100%;
+  height: 30px;
+  padding: 2px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.kind-form-actions {
+  display: flex;
+  grid-column: 1 / -1;
+  gap: var(--space-2);
+}

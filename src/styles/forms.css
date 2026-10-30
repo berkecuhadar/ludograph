@@ -1,0 +1,83 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.field-label {
+  padding: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+:is(.sidebar, .modal) :is(input[type='text'], input[type='number'], select, textarea) {
+  width: 100%;
+  min-width: 0;
+  padding: 5px var(--space-2);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font: inherit;
+}
+
+:is(.sidebar, .modal) textarea {
+  resize: vertical;
+}
+
+:is(.sidebar, .modal) button {
+  padding: 3px var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+:is(.sidebar, .modal) button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+:is(.sidebar, .modal) button.small {
+  padding: 1px var(--space-2);
+  font-size: 12px;
+}
+
+:is(.sidebar, .modal) button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+
+:is(.sidebar, .modal) button.danger {
+  color: var(--danger);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

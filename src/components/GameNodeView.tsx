@@ -5,6 +5,7 @@ import { findCustomKind, isCustomKind, kindLabel } from '../model/kinds';
 import type { GameNode, Mda } from '../model/types';
 import { useProjectStore } from '../store/projectStore';
 import { KIND_HUE } from './kindHue';
+import { KindIcon } from './KindIcon';
 import './GameNodeView.css';
 
 export type GameFlowNode = Node<{ node: GameNode }, 'game'>;
@@ -34,6 +35,10 @@ export const GameNodeView = memo(function GameNodeView({
 }: NodeProps<GameFlowNode>) {
   const node = data.node;
   const customKinds = useProjectStore((s) => s.project.customKinds);
+  const insideCount = useProjectStore((s) =>
+    node.childGraphId ? s.project.graphs[node.childGraphId]?.nodes.length : undefined,
+  );
+  const custom = isCustomKind(node.kind) ? findCustomKind(node.kind, customKinds) : undefined;
 
   const style: CSSProperties = {};
   if (isCustomKind(node.kind)) {
@@ -49,7 +54,10 @@ export const GameNodeView = memo(function GameNodeView({
     <div className="gnode" data-selected={selected} data-status={node.status} style={style}>
       <Handle type="target" position={Position.Left} />
       <div className="gnode-top">
-        <span className="gnode-kind">{kindLabel(node.kind, customKinds)}</span>
+        <span className="gnode-kind">
+          {custom && <KindIcon icon={custom.icon} color={custom.color} size={12} />}
+          {kindLabel(node.kind, customKinds)}
+        </span>
         <span className="gnode-marks">
           {layerLabel && (
             <span className="gnode-layer" title={layerLabel}>
@@ -62,6 +70,11 @@ export const GameNodeView = memo(function GameNodeView({
       <div className="gnode-title">{node.title || ' '}</div>
       <div className="gnode-bottom">
         <span className="gnode-status">{strings.status[node.status]}</span>
+        {insideCount !== undefined && (
+          <span className="gnode-inside" title={strings.breadcrumb.openInside}>
+            {strings.breadcrumb.inside(insideCount)}
+          </span>
+        )}
       </div>
       <Handle type="source" position={Position.Right} />
     </div>

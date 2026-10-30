@@ -1,4 +1,5 @@
 import { strings } from '../../lib/strings';
+import { countInsideNodes } from '../../model/graphOps';
 import {
   AESTHETIC_TYPES,
   CONTENT_COSTS,
@@ -24,10 +25,24 @@ export function NodeInspector({ node }: { node: GameNode }) {
   const updateNode = useProjectStore((s) => s.updateNode);
   const removeNodes = useProjectStore((s) => s.removeNodes);
   const duplicateNodes = useProjectStore((s) => s.duplicateNodes);
+  const openNode = useProjectStore((s) => s.openNode);
+  const askConfirm = useUiStore((s) => s.askConfirm);
   const requestSelect = useUiStore((s) => s.requestSelect);
 
   const set = (patch: Partial<GameNode>, coalesceKey?: string) =>
     updateNode(node.id, patch, coalesceKey ? { coalesce: `${coalesceKey}:${node.id}` } : undefined);
+
+  const remove = async () => {
+    const { project } = useProjectStore.getState();
+    const inside = countInsideNodes(project, [node]);
+    if (
+      inside > 0 &&
+      !(await askConfirm(strings.confirm.removeWithInside(1), strings.confirm.ok))
+    ) {
+      return;
+    }
+    removeNodes([node.id]);
+  };
 
   const showScope = node.layer === 2 || node.layer === 3;
 
@@ -142,10 +157,13 @@ export function NodeInspector({ node }: { node: GameNode }) {
       <ParamsEditor params={node.params} onChange={(params) => set({ params })} />
 
       <div className="inspector-actions">
+        <button type="button" onClick={() => openNode(node.id)}>
+          {strings.breadcrumb.openInside}
+        </button>
         <button type="button" onClick={() => requestSelect(duplicateNodes([node.id]))}>
           {t.duplicate}
         </button>
-        <button type="button" className="danger" onClick={() => removeNodes([node.id])}>
+        <button type="button" className="danger" onClick={() => void remove()}>
           {t.delete}
         </button>
       </div>

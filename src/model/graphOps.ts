@@ -1,5 +1,6 @@
 import { newId } from '../lib/id';
 import { strings } from '../lib/strings';
+import { createGraph } from './factory';
 import type { GameEdge, GameNode, Graph, Project } from './types';
 
 export function getGraph(project: Project, graphId: string): Graph {
@@ -81,4 +82,104 @@ export function patchNode(node: GameNode, patch: Partial<GameNode>): GameNode {
     else (next as Record<string, unknown>)[key] = node[key];
   }
   return next;
+}
+
+export function findGraphOfNode(project: Project, nodeId: string): Graph | undefined {
+  return Object.values(project.graphs).find((g) => g.nodes.some((n) => n.id === nodeId));
+}
+
+// Ids of the inside graphs of these nodes, and of everything nested below them.
+function descendantGraphIds(project: Project, nodes: GameNode[]): string[] {
+  const found: string[] = [];
+  const queue = nodes.flatMap((n) => (n.childGraphId ? [n.childGraphId] : []));
+  while (queue.length > 0) {
+    const id = queue.pop();
+    const graph = id ? project.graphs[id] : undefined;
+    if (!id || !graph || found.includes(id)) continue;
+    found.push(id);
+    for (const inner of graph.nodes) if (inner.childGraphId) queue.push(inner.childGraphId);
+  }
+  return found;
+}
+
+// How many nodes would disappear with these nodes, counting the ones inside them.
+export function countInsideNodes(project: Project, nodes: GameNode[]): number {
+  return descendantGraphIds(project, nodes).reduce(
+    (sum, id) => sum + (project.graphs[id]?.nodes.length ?? 0),
+    0,
+  );
+}
+
+// Removes nodes (and their edges) from one graph, plus any graphs that were inside them.
+export function removeNodesFromProject(
+  project: Project,
+  graphId: string,
+  ids: ReadonlySet<string>,
+): Project {
+  const graph = getGraph(project, graphId);
+  const doomed = graph.nodes.filter((n) => ids.has(n.id));
+  const dropGraphs = new Set(descendantGraphIds(project, doomed));
+
+  const gone = new Set(ids);
+  const graphs: Record<string, Graph> = {};
+  for (const [id, g] of Object.entries(project.graphs)) {
+    if (dropGraphs.has(id)) {
+      for (const n of g.nodes) gone.add(n.id);
+      continue;
+    }
+    graphs[id] = id === graphId ? removeNodes(g, ids) : g;
+  }
+
+  const next: Project = { ...project, graphs };
+  if (project.viewPositions) {
+    const prune = (positions: Record<string, { x: number; y: number }> | undefined) =>
+      positions && Object.fromEntries(Object.entries(positions).filter(([id]) => !gone.has(id)));
+    next.viewPositions = {
+      onion: prune(project.viewPositions.onion),
+      mda: prune(project.viewPositions.mda),
+    };
+  }
+  return next;
+}
+
+// Gives a node its inside graph if it has none yet.
+export function ensureChildGraph(
+  project: Project,
+  graphId: string,
+  nodeId: string,
+): { project: Project; childGraphId: string } | null {
+  const node = getGraph(project, graphId).nodes.find((n) => n.id === nodeId);
+  if (!node) return null;
+  if (node.childGraphId && project.graphs[node.childGraphId]) {
+    return { project, childGraphId: node.childGraphId };
+  }
+  const child = createGraph(node.title || strings.project.insideName, node.id);
+  const withNode = updateGraph(project, graphId, (g) => ({
+    ...g,
+    nodes: g.nodes.map((n) => (n.id === nodeId ? { ...n, childGraphId: child.id } : n)),
+  }));
+  return {
+    project: { ...withNode, graphs: { ...withNode.graphs, [child.id]: child } },
+    childGraphId: child.id,
+  };
+}
+
+// The chain of graphs from the root down to this one, for the breadcrumb.
+export function graphPath(project: Project, graphId: string): { graphId: string; label: string }[] {
+  const path: { graphId: string; label: string }[] = [];
+  const seen = new Set<string>();
+  let current = project.graphs[graphId];
+  while (current && !seen.has(current.id)) {
+    seen.add(current.id);
+    const parentId = current.parentNodeId;
+    if (parentId === undefined) {
+      path.unshift({ graphId: current.id, label: current.name });
+      break;
+    }
+    const parentGraph = findGraphOfNode(project, parentId);
+    const parentNode = parentGraph?.nodes.find((n) => n.id === parentId);
+    path.unshift({ graphId: current.id, label: parentNode?.title || current.name });
+    current = parentGraph;
+  }
+  return path;
 }

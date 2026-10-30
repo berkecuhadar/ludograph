@@ -1,0 +1,27 @@
+.notice {
+  position: fixed;
+  bottom: var(--space-4);
+  left: 50%;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: min(560px, calc(100vw - 32px));
+  padding: var(--space-2) var(--space-3);
+  transform: translateX(-50%);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--danger);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.18);
+  font-size: 13px;
+}
+
+.notice button {
+  padding: 0 6px;
+  background: transparent;
+  border: 0;
+  color: var(--text-muted);
+  font: inherit;
+  cursor: pointer;
+}

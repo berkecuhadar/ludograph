@@ -5,11 +5,12 @@ type ModalProps = {
   open: boolean;
   title: string;
   onClose: () => void;
+  wide?: boolean;
   children: ReactNode;
 };
 
 // Thin wrapper over the native dialog element: it gives us focus trapping and Esc for free.
-export function Modal({ open, title, onClose, children }: ModalProps) {
+export function Modal({ open, title, onClose, wide, children }: ModalProps) {
   const ref = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -22,7 +23,7 @@ export function Modal({ open, title, onClose, children }: ModalProps) {
   return (
     <dialog
       ref={ref}
-      className="modal"
+      className={wide ? 'modal modal-wide' : 'modal'}
       aria-label={title}
       onClose={onClose}
       onClick={(e) => {
