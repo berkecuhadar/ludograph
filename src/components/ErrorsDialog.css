@@ -1,0 +1,14 @@
+.error-list {
+  max-height: 280px;
+  margin: var(--space-2) 0;
+  padding: var(--space-2) var(--space-3) var(--space-2) var(--space-5, 24px);
+  overflow-y: auto;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.error-list li {
+  padding: 2px 0;
+  overflow-wrap: anywhere;
+}

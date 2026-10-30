@@ -79,3 +79,21 @@ body {
 .canvas .react-flow {
   background: transparent;
 }
+
+.project-name {
+  min-width: 120px;
+  max-width: 260px;
+  padding: 2px var(--space-2);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font: inherit;
+}
+
+.project-name:hover,
+.project-name:focus {
+  background: var(--bg);
+  border-color: var(--border);
+  color: var(--text);
+}

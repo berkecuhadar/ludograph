@@ -3,6 +3,7 @@ import { Breadcrumb } from './components/Breadcrumb';
 import { Canvas } from './components/Canvas';
 import { ConfirmDialog } from './components/ConfirmDialog';
 import { ConnectDialog } from './components/ConnectDialog';
+import { ErrorsDialog } from './components/ErrorsDialog';
 import { Header } from './components/Header';
 import { HelpDialog } from './components/HelpDialog';
 import { Notice } from './components/Notice';
@@ -40,6 +41,7 @@ export function App() {
       <SettingsDialog />
       <ConnectDialog />
       <ConfirmDialog />
+      <ErrorsDialog />
       <Notice />
     </ReactFlowProvider>
   );
