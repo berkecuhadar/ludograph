@@ -24,6 +24,51 @@ body {
   outline-offset: 2px;
 }
 
-.shell {
-  padding: var(--space-4);
+.app {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-project {
+  color: var(--text-muted);
+}
+
+.app-spacer {
+  flex: 1;
+}
+
+.app-header button {
+  padding: 3px var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.app-header button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.app-body {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  min-height: 0;
+}
+
+.canvas {
+  min-width: 0;
+  min-height: 0;
 }

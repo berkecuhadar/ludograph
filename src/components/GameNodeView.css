@@ -1,0 +1,82 @@
+.gnode {
+  --kind-l: 40%;
+  --node-accent: var(--kind-accent, hsl(var(--kind-hue, 210) 55% var(--kind-l)));
+  min-width: 160px;
+  max-width: 240px;
+  padding: var(--space-2) var(--space-3);
+  background: color-mix(in srgb, var(--node-accent) 10%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--node-accent) 45%, var(--border));
+  border-left: 4px solid var(--node-accent);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 13px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .gnode {
+    --kind-l: 66%;
+  }
+}
+
+.gnode[data-selected='true'] {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.gnode[data-status='cut'] {
+  opacity: 0.55;
+}
+
+.gnode[data-status='cut'] .gnode-title {
+  text-decoration: line-through;
+}
+
+.gnode-top,
+.gnode-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.gnode-kind {
+  color: var(--text-muted);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.gnode-marks {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.gnode-layer {
+  padding: 0 5px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.gnode-mda {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 1.5;
+}
+
+.gnode-title {
+  margin: var(--space-1) 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.gnode-status {
+  padding: 0 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  color: var(--text-muted);
+  font-size: 11px;
+}

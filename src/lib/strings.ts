@@ -9,6 +9,39 @@ export const strings = {
     rootGraph: 'Main',
   },
   copySuffix: 'copy',
+  header: {
+    undo: 'Undo',
+    redo: 'Redo',
+  },
+  palette: {
+    title: 'Add node',
+    secondaryMechanic: 'Secondary mechanic',
+    groups: {
+      experience: 'Experience',
+      mechanics: 'Mechanics',
+      outer: 'Outer layers',
+      other: 'Other',
+      custom: 'Custom',
+    },
+  },
+  status: {
+    idea: 'Idea',
+    designed: 'Designed',
+    prototyped: 'Prototyped',
+    implemented: 'Implemented',
+    cut: 'Cut',
+  },
+  mda: {
+    mechanics: 'Mechanics',
+    dynamics: 'Dynamics',
+    aesthetics: 'Aesthetics',
+  },
+  layers: {
+    0: 'Core mechanic',
+    1: 'Secondary mechanic',
+    2: 'Progression',
+    3: 'Narrative',
+  },
   kinds: {
     pillar: 'Pillar',
     aesthetic: 'Aesthetic',
