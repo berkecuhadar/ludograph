@@ -59,3 +59,26 @@ export function instantiateSnippet(snippet: Snippet, offset: { x: number; y: num
   });
   return { nodes, edges };
 }
+
+const OPTIONAL_NODE_KEYS = new Set<keyof GameNode>([
+  'layer',
+  'childGraphId',
+  'aestheticType',
+  'resourceRole',
+  'ocean',
+  'contentCost',
+  'prototypeScope',
+  'returnHook',
+]);
+
+// Applies a patch to a node. An optional field patched with undefined is removed
+// from the node; the id never changes and required fields can't be unset.
+export function patchNode(node: GameNode, patch: Partial<GameNode>): GameNode {
+  const next: GameNode = { ...node, ...patch, id: node.id };
+  for (const key of Object.keys(patch) as (keyof GameNode)[]) {
+    if (patch[key] !== undefined) continue;
+    if (OPTIONAL_NODE_KEYS.has(key)) delete (next as Partial<GameNode>)[key];
+    else (next as Record<string, unknown>)[key] = node[key];
+  }
+  return next;
+}

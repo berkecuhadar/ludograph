@@ -36,6 +36,14 @@ describe('nodes', () => {
     expect(graph().nodes[0]?.title).toBe('Hello');
   });
 
+  it('clears an optional field when it is patched with undefined', () => {
+    const id = store().addNode('mechanic', { x: 0, y: 0 });
+    store().updateNode(id, { layer: undefined });
+    expect('layer' in (graph().nodes[0] ?? {})).toBe(false);
+    store().undo();
+    expect(graph().nodes[0]?.layer).toBe(0);
+  });
+
   it('removes a node together with its edges', () => {
     const a = store().addNode('mechanic', { x: 0, y: 0 });
     const b = store().addNode('dynamic', { x: 100, y: 0 });

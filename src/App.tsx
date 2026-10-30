@@ -1,6 +1,7 @@
 import { ReactFlowProvider } from '@xyflow/react';
 import { Canvas } from './components/Canvas';
 import { HelpDialog } from './components/HelpDialog';
+import { Inspector } from './components/inspector/Inspector';
 import { Palette } from './components/Palette';
 import { QuickAdd } from './components/QuickAdd';
 import { Shortcuts } from './components/Shortcuts';
@@ -36,6 +37,7 @@ export function App() {
         <div className="app-body">
           <Palette />
           <Canvas />
+          <Inspector />
         </div>
       </div>
       <Shortcuts />

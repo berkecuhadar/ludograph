@@ -4,6 +4,7 @@ import { createNode, createProject } from '../model/factory';
 import {
   extractSnippet,
   instantiateSnippet,
+  patchNode,
   removeNodes,
   updateGraph,
   type Snippet,
@@ -94,7 +95,7 @@ export const useProjectStore = create<ProjectState>()((set, get) => {
 
     updateNode: (id, patch, options) =>
       editGraph(
-        (g) => ({ ...g, nodes: g.nodes.map((n) => (n.id === id ? { ...n, ...patch, id } : n)) }),
+        (g) => ({ ...g, nodes: g.nodes.map((n) => (n.id === id ? patchNode(n, patch) : n)) }),
         options,
       ),
 
