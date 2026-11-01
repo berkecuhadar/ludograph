@@ -1,12 +1,13 @@
 import {
   existsSync,
+  mkdirSync,
   readdirSync,
   readFileSync,
   renameSync,
   statSync,
   writeFileSync,
 } from 'node:fs';
-import { basename, join, relative, resolve } from 'node:path';
+import { basename, dirname, join, relative, resolve } from 'node:path';
 import { findNode, type Batch } from '../src/cli/batch.ts';
 import {
   applyAndReport,
@@ -95,6 +96,7 @@ function load(file: string | undefined): { path: string; project: Project } {
 // Writes next to the file first and then renames, so a crash never leaves half a project.
 function save(path: string, project: Project) {
   const temp = `${path}.tmp`;
+  mkdirSync(dirname(path), { recursive: true });
   writeFileSync(temp, `${JSON.stringify(project, null, 2)}\n`);
   renameSync(temp, path);
 }
