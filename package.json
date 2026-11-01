@@ -4,6 +4,14 @@
   "version": "0.0.0",
   "description": "Open-source visual editor for game design: MDA, onion layers, typed graphs.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/berkecuhadar/ludograph.git"
+  },
+  "bugs": {
+    "url": "https://github.com/berkecuhadar/ludograph/issues"
+  },
+  "homepage": "https://github.com/berkecuhadar/ludograph#readme",
   "type": "module",
   "bin": {
     "ludograph": "dist-cli/ludograph.mjs"
