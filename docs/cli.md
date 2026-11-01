@@ -67,7 +67,7 @@ existing ones; use the editor's Auto layout to tidy up.
 
 ```
 ludograph scan-unity game.ludograph.json Assets [--refs] [--include-plain] [--exclude Folder,Other]
-                                         [--skip-name 'UI$,Panel$']
+                          [--skip-name 'UI$,Panel$'] [--dry-run]
 ```
 
 | Found in C#                                                      | Becomes                                            |
@@ -79,7 +79,8 @@ ludograph scan-unity game.ludograph.json Assets [--refs] [--include-plain] [--ex
 | any other class                                                  | skipped, unless `--include-plain`                  |
 | a class mentioning another scanned class                         | `modifies` edge labelled `ref`, only with `--refs` |
 
-- Folders called Editor, Tests, Test, Plugins, ThirdParty, Packages and TextMesh Pro are skipped.
+- These folders are always skipped: Editor, Tests, Test, Plugins, ThirdParty, Packages, TextMesh Pro,
+  Library, Temp, obj, Logs, Builds, node_modules and .git. `--exclude` adds more folder names.
 - `--skip-name` takes comma separated regular expressions. A class whose name matches one gets no
   node, for example `UI$` for every name ending in UI. Edges to skipped classes are dropped too.
 - The `/// <summary>` above a class becomes the node description.
@@ -111,5 +112,9 @@ empty, the graph is arranged afterwards (a checkbox, so you can turn it off).
 ## Using it from Claude Code
 
 Copy [`examples/claude/SKILL.md`](../examples/claude/SKILL.md) to
-`.claude/skills/ludograph/SKILL.md` in the Unity project and fix the path to the tool. Claude then
-knows the commands, the rules, and the order to work in: scan, read `nodes`, describe, validate.
+`.claude/skills/ludograph/SKILL.md` in the Unity project. If you did not run `npm link`, change the
+command in the file to the full path of `dist-cli/ludograph.mjs`. Claude then knows the commands,
+the rules and the order to work in: scan, read `nodes`, describe, validate.
+
+The tool makes no AI calls itself. Claude runs on your machine with your own Claude Code login, so
+it uses your own subscription or API key. The browser editor cannot use it.

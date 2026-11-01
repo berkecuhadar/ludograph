@@ -19,7 +19,8 @@ the project file.
 
 1. `schema` shows the node kinds, edge rules and allowed values. Run it first if unsure.
 2. `nodes F --no-edges` lists what exists. Reuse a node instead of adding a duplicate.
-3. To sync with code: `scan-unity F Assets`. Safe to repeat; it never overwrites text the
+3. To sync with code: `scan-unity F Assets --dry-run` first, then without `--dry-run`. Use
+   `--skip-name` to leave out UI classes and similar. Safe to repeat; it never overwrites text the
    designer wrote. Read `missingFromCode` in the output and tell the user, do not delete.
 4. Describe things the code cannot say, in one `apply` batch (JSON on stdin with `-`).
 5. `validate F` at the end. Fix errors. Report warnings to the user.
