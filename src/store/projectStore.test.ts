@@ -155,3 +155,28 @@ describe('undo and redo', () => {
     expect(store().future).toHaveLength(0);
   });
 });
+
+describe('applyBatch', () => {
+  it('adds a batch as one undo step', () => {
+    const result = store().applyBatch({
+      nodes: [
+        { id: 'a', kind: 'mechanic', title: 'Jump' },
+        { id: 'b', kind: 'mechanic', title: 'Land' },
+      ],
+      edges: [{ kind: 'triggers', from: 'a', to: 'b' }],
+    });
+    expect(result.ok).toBe(true);
+    expect(graph().nodes).toHaveLength(2);
+    expect(graph().edges).toHaveLength(1);
+    store().undo();
+    expect(graph().nodes).toHaveLength(0);
+  });
+
+  it('leaves the project alone when the batch is wrong', () => {
+    const before = store().project;
+    const result = store().applyBatch({ edges: [{ kind: 'feeds', from: 'x', to: 'y' }] });
+    expect(result.ok).toBe(false);
+    expect(store().project).toBe(before);
+    expect(store().past).toHaveLength(0);
+  });
+});

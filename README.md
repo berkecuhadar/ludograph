@@ -35,6 +35,9 @@ prototype mode, and the validation rules.
   sections, three templates), based on [OpenGDD](https://github.com/berkecuhadar/opengdd). It can pull
   text from the graph, and the Markdown export puts it in front of the graph as the design model.
 - Export to Markdown (a GDD), Unity JSON, PNG and SVG.
+- Import from Unity code in the File menu: pick a folder, choose what to add, undo if needed.
+- A command line tool that adds and checks nodes and edges in a project file, and can scan a Unity
+  project's C# code into nodes. See [docs/cli.md](docs/cli.md).
 
 More detail is in [docs/data-model.md](docs/data-model.md).
 
@@ -45,9 +48,35 @@ npm install
 npm run dev
 ```
 
-Also: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`.
+Also: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm run build:cli`.
 
 Press `?` (or the key left of 1) in the app for the keyboard shortcuts.
+
+## Working with a Unity project
+
+Ludograph can fill the graph from your C# code, in the editor or on the command line. Both read
+MonoBehaviours, ScriptableObjects and state enums, make a node for each, and add `requires` edges
+from `[RequireComponent]`. Running a scan again updates the nodes and never overwrites text you wrote.
+
+- In the editor: File > Import from Unity code, pick the `Assets` folder, tick what to add. The files
+  are read in the browser and not uploaded. Undo takes the import back.
+- On the command line:
+
+  ```sh
+  npm run build:cli
+  npm link
+  ludograph init design/game.ludograph.json --name "My game"
+  ludograph scan-unity design/game.ludograph.json Assets --dry-run
+  ludograph validate design/game.ludograph.json
+  ```
+
+- With Claude Code: copy [examples/claude/SKILL.md](examples/claude/SKILL.md) into your Unity
+  project as `.claude/skills/ludograph/SKILL.md`. Claude then reads the code, proposes layers and
+  edges, writes them through the command line tool (which refuses invalid ones) and runs the
+  validation. It uses the Claude Code you already have, with your own account. Ludograph itself makes
+  no AI calls and needs no key.
+
+All commands, the batch format and the scan rules are in [docs/cli.md](docs/cli.md).
 
 ## Plan
 

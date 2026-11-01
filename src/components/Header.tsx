@@ -49,6 +49,7 @@ export function Header() {
     { label: t.new, onSelect: () => void newProject() },
     { label: t.open, onSelect: () => fileInput.current?.click() },
     { label: t.save, onSelect: saveFile },
+    { label: t.importUnity, onSelect: () => setDialog('unityImport'), separator: true },
     { label: t.exportMarkdown, onSelect: exportMarkdownFile, separator: true },
     { label: t.exportUnity, onSelect: exportUnityFile },
     ...imageItems,

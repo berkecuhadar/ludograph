@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { applyBatch as runBatch, type Batch, type BatchResult } from '../cli/batch';
 import { newId } from '../lib/id';
 import { strings } from '../lib/strings';
 import { emptyGdd } from '../gdd/sections';
@@ -49,6 +50,8 @@ type ProjectState = {
   clipboard: Snippet | null;
 
   loadProject: (project: Project) => void;
+  /** Adds or updates nodes and edges from a batch in one undo step. Nothing changes on errors. */
+  applyBatch: (batch: Batch) => BatchResult;
   setProjectName: (name: string) => void;
   setDesignOrder: (order: DesignOrder) => void;
   setCoreOnly: (on: boolean) => void;
@@ -150,6 +153,12 @@ export const useProjectStore = create<ProjectState>()((set, get) => {
     lastEditKey: null,
     lastEditAt: 0,
     clipboard: null,
+
+    applyBatch: (batch) => {
+      const result = runBatch(get().project, batch);
+      if (result.ok) commit(result.project);
+      return result;
+    },
 
     loadProject: (project) =>
       set({

@@ -15,6 +15,7 @@ import { SearchDialog } from './components/SearchDialog';
 import { SettingsDialog } from './components/settings/SettingsDialog';
 import { Shortcuts } from './components/Shortcuts';
 import { Sidebar } from './components/Sidebar';
+import { UnityImportDialog } from './components/UnityImportDialog';
 import { ValidationRunner } from './components/ValidationRunner';
 import { useProjectStore } from './store/projectStore';
 import { useUiStore } from './store/uiStore';
@@ -50,6 +51,7 @@ export function App() {
       <ConfirmDialog />
       <ErrorsDialog />
       <TemplatesDialog />
+      <UnityImportDialog />
       <Notice />
     </ReactFlowProvider>
   );

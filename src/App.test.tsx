@@ -172,4 +172,50 @@ describe('App', () => {
     expect(buttons).toContain('From graph');
     expect(buttons).toContain('Create pillar nodes');
   });
+
+  it('imports nodes from a chosen Unity folder', async () => {
+    useProjectStore.getState().loadProject(createProject());
+    const el = mount();
+    act(() => useUiStore.getState().setDialog('unityImport'));
+
+    const code = (name: string, text: string, path: string) => {
+      const file = new File([text], name);
+      Object.defineProperty(file, 'webkitRelativePath', { value: path });
+      return file;
+    };
+    const files = [
+      code('Mover.cs', 'public class Mover : MonoBehaviour { }', 'Assets/Scripts/Mover.cs'),
+      code('Ui.cs', 'public class HudUI : MonoBehaviour { }', 'Assets/Scripts/Ui.cs'),
+      code('Skip.cs', 'public class Skipped : MonoBehaviour { }', 'Assets/Editor/Skip.cs'),
+    ];
+    const input = el.querySelector<HTMLInputElement>('.unity-import input[type="file"]');
+    expect(input).not.toBeNull();
+    Object.defineProperty(input, 'files', { value: files, configurable: true });
+    await act(async () => {
+      input?.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+
+    const labels = [...el.querySelectorAll('.unity-list strong')].map((n) => n.textContent);
+    expect(labels.sort()).toEqual(['HudUI', 'Mover']);
+
+    const skip = el.querySelector<HTMLInputElement>('.unity-text input');
+    expect(skip).not.toBeNull();
+    await act(async () => {
+      const set = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
+      set?.call(skip, 'UI$');
+      skip?.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    expect([...el.querySelectorAll('.unity-list strong')].map((n) => n.textContent)).toEqual([
+      'Mover',
+    ]);
+
+    const buttons = [
+      ...el.querySelectorAll<HTMLButtonElement>('.unity-import .dialog-actions button'),
+    ];
+    await act(async () => buttons[buttons.length - 1]?.click());
+    const root_ = useProjectStore.getState().project;
+    const titles = root_.graphs[root_.rootGraphId]?.nodes.map((n) => n.title);
+    expect(titles).toEqual(['Mover']);
+    expect(useUiStore.getState().dialog).toBeNull();
+  });
 });

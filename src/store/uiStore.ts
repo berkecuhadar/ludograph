@@ -4,7 +4,15 @@ import type { EdgeKind } from '../model/types';
 import type { Filter } from '../views/display';
 
 export type DialogName =
-  'quickAdd' | 'help' | 'settings' | 'connect' | 'search' | 'errors' | 'confirm' | 'templates';
+  | 'quickAdd'
+  | 'help'
+  | 'settings'
+  | 'connect'
+  | 'search'
+  | 'errors'
+  | 'confirm'
+  | 'templates'
+  | 'unityImport';
 
 export type ViewName = 'graph' | 'onion' | 'mda';
 export type AppMode = 'graph' | 'document';

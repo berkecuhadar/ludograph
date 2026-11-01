@@ -75,12 +75,52 @@ export const strings = {
     importBad: 'Could not read the OpenGDD file',
     exported: (name: string) => `Exported ${name}.`,
   },
+  unity: {
+    title: 'Import from Unity code',
+    intro:
+      'Pick the Assets folder of a Unity project. Ludograph reads the C# files in your browser and proposes a node for each MonoBehaviour, ScriptableObject and state enum. Nothing is uploaded. You choose what to add before anything changes, and the import can be undone.',
+    chooseFolder: 'Choose folder...',
+    chooseAnother: 'Choose another folder...',
+    reading: 'Reading files...',
+    folderSummary: (folder: string, count: number) =>
+      `${folder}: ${count} C# ${count === 1 ? 'file' : 'files'} read.`,
+    noScripts: 'No C# files were found in that folder.',
+    optionsLegend: 'Options',
+    includePlain: 'Also add plain C# classes',
+    includePlainHint: 'Classes that are not a MonoBehaviour or ScriptableObject.',
+    refs: 'Add an edge when a class uses another one',
+    refsHint: 'Draws a "modifies" edge labelled "ref". Can be a lot of edges.',
+    skipNames: 'Skip names (regular expressions, comma separated)',
+    skipNamesPlaceholder: 'UI$, Panel$, Test',
+    skipFolders: 'Skip folders (names, comma separated)',
+    skipFoldersPlaceholder: 'Generated, Samples',
+    ignoredNote:
+      'Editor, Tests, Plugins, Packages, Library and similar folders are always skipped.',
+    arrange: 'Arrange the graph afterwards',
+    summary: (added: number, updated: number, edges: number) =>
+      `${added} new ${added === 1 ? 'node' : 'nodes'}, ${edges} ${edges === 1 ? 'edge' : 'edges'}` +
+      (updated > 0
+        ? `. ${updated} existing ${updated === 1 ? 'node keeps' : 'nodes keep'} its text and gets a fresh source path.`
+        : '.'),
+    listFilter: 'Filter the list',
+    selectAll: 'Select all',
+    selectNone: 'Select none',
+    none: 'Nothing new to add.',
+    missing: (titles: string) => `No longer in the code (left in the graph): ${titles}`,
+    warnings: 'Warnings',
+    importButton: (count: number) => `Add ${count} ${count === 1 ? 'node' : 'nodes'}`,
+    done: (nodes: number, edges: number) =>
+      `Imported ${nodes} ${nodes === 1 ? 'node' : 'nodes'} and ${edges} ${edges === 1 ? 'edge' : 'edges'}. Undo takes them back.`,
+    problems: 'The import was not applied:',
+    cancel: 'Cancel',
+  },
   file: {
     menu: 'File',
     projectName: 'Project name',
     new: 'New project',
     open: 'Open file',
     save: 'Save as file',
+    importUnity: 'Import from Unity code...',
     exportMarkdown: 'Export Markdown GDD',
     exportUnity: 'Export Unity JSON',
     exportPng: 'Export PNG image',
