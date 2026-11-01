@@ -12,10 +12,11 @@
     "moduleDetection": "force",
     "noEmit": true,
     "strict": true,
+    "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "erasableSyntaxOnly": true
   },
-  "include": ["vite.config.ts", "eslint.config.js"]
+  "include": ["vite.config.ts", "vite.cli.config.ts", "eslint.config.js", "cli"]
 }

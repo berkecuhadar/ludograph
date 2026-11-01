@@ -5,9 +5,13 @@
   "description": "Open-source visual editor for game design: MDA, onion layers, typed graphs.",
   "license": "MIT",
   "type": "module",
+  "bin": {
+    "ludograph": "dist-cli/ludograph.mjs"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:cli": "vite build --config vite.cli.config.ts",
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
