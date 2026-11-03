@@ -7,6 +7,8 @@ next.
 It runs in the browser, there is no backend. Work is autosaved in local storage and can be saved to and
 opened from `.ludograph.json` files.
 
+![Ludograph editor with the Lantern Run example](docs/images/ludograph.png)
+
 ## Background
 
 Two ideas shape the data model:
@@ -38,6 +40,8 @@ prototype mode, and the validation rules.
 - Import from Unity code in the File menu: pick a folder, choose what to add, undo if needed.
 - A command line tool that adds and checks nodes and edges in a project file, and can scan a Unity
   project's C# code into nodes. See [docs/cli.md](docs/cli.md).
+
+![Graph, Onion and MDA views](docs/images/ludograph.gif)
 
 More detail is in [docs/data-model.md](docs/data-model.md).
 
