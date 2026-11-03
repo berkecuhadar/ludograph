@@ -7,6 +7,8 @@ next.
 It runs in the browser, there is no backend. Work is autosaved in local storage and can be saved to and
 opened from `.ludograph.json` files.
 
+Live demo: https://ludograph.mythlorestudios.com
+
 ![Ludograph editor with the Lantern Run example](docs/images/ludograph.png)
 
 ## Background
