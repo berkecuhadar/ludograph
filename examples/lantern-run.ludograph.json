@@ -1,0 +1,271 @@
+{
+  "schemaVersion": 1,
+  "id": "lantern-run",
+  "name": "Lantern Run",
+  "rootGraphId": "g_root",
+  "designOrder": "outsideIn",
+  "customKinds": [],
+  "graphs": {
+    "g_root": {
+      "id": "g_root",
+      "name": "Lantern Run",
+      "nodes": [
+        {
+          "id": "n_pillar_light",
+          "kind": "pillar",
+          "title": "Light is both tool and clock",
+          "description": "The lantern lets you see and it is also what runs out. Every design choice should make the player weigh seeing more against staying alive longer.",
+          "mda": "aesthetics",
+          "status": "designed",
+          "tags": [],
+          "params": [],
+          "position": { "x": 0, "y": 0 }
+        },
+        {
+          "id": "n_aes_tense",
+          "kind": "aesthetic",
+          "title": "Tense discovery",
+          "description": "The player creeps through the dark, never sure what the next patch of light will show, and feels relief each time a shrine appears.",
+          "mda": "aesthetics",
+          "status": "designed",
+          "tags": [],
+          "params": [],
+          "position": { "x": 0, "y": 200 },
+          "aestheticType": "discovery"
+        },
+        {
+          "id": "n_persona_cautious",
+          "kind": "persona",
+          "title": "Cautious explorer",
+          "description": "Plays in short evening sessions, likes atmosphere over speed and dislikes being punished by surprise.",
+          "mda": "aesthetics",
+          "status": "idea",
+          "tags": [],
+          "params": [],
+          "position": { "x": -300, "y": 200 },
+          "ocean": { "o": 75, "c": 70, "e": 30, "a": 60, "n": 55 }
+        },
+        {
+          "id": "n_dyn_detours",
+          "kind": "dynamic",
+          "title": "Risky detours",
+          "description": "Players burn extra oil to peek into side tunnels because the reward might be worth it.",
+          "mda": "dynamics",
+          "status": "idea",
+          "tags": [],
+          "params": [],
+          "position": { "x": 0, "y": 400 }
+        },
+        {
+          "id": "n_loop",
+          "kind": "coreLoop",
+          "title": "Explore, burn, return",
+          "description": "Leave the shrine, walk into the dark, collect oil and treasure, get back before the flame dies.",
+          "mda": "mechanics",
+          "layer": 0,
+          "status": "prototyped",
+          "tags": ["core"],
+          "params": [{ "key": "targetRunSeconds", "value": 240 }],
+          "position": { "x": 0, "y": 600 },
+          "childGraphId": "g_loop"
+        },
+        {
+          "id": "n_act_move",
+          "kind": "action",
+          "title": "Move",
+          "description": "Walk in four directions. Moving is free, standing still is free too.",
+          "mda": "mechanics",
+          "layer": 0,
+          "status": "prototyped",
+          "tags": [],
+          "params": [{ "key": "tilesPerSecond", "value": 3 }],
+          "position": { "x": -300, "y": 800 }
+        },
+        {
+          "id": "n_res_oil",
+          "kind": "resource",
+          "title": "Lantern oil",
+          "description": "Fuel for the lantern. When it hits zero the light goes out and the run ends.",
+          "mda": "mechanics",
+          "layer": 0,
+          "status": "prototyped",
+          "tags": [],
+          "params": [
+            { "key": "max", "value": 100 },
+            { "key": "start", "value": 60 }
+          ],
+          "position": { "x": 0, "y": 800 },
+          "resourceRole": "pool"
+        },
+        {
+          "id": "n_mech_burn",
+          "kind": "mechanic",
+          "title": "Oil burn",
+          "description": "The lantern burns oil every second. A brighter flame sees further and burns faster.",
+          "mda": "mechanics",
+          "layer": 0,
+          "status": "prototyped",
+          "tags": [],
+          "params": [
+            { "key": "burnPerSecond", "value": 0.5 },
+            { "key": "brightMultiplier", "value": 2 }
+          ],
+          "position": { "x": 300, "y": 800 }
+        },
+        {
+          "id": "n_mech_pickup",
+          "kind": "mechanic",
+          "title": "Oil pickup",
+          "description": "Oil flasks lie in the caves. Picking one up refills a fixed amount.",
+          "mda": "mechanics",
+          "layer": 0,
+          "status": "designed",
+          "tags": [],
+          "params": [{ "key": "refill", "value": 15 }],
+          "position": { "x": 300, "y": 1000 }
+        },
+        {
+          "id": "n_mech_shrine",
+          "kind": "mechanic",
+          "title": "Shrine checkpoints",
+          "description": "Shrines refill the lantern for free and save the run. They are the reason to turn back instead of pushing on.",
+          "mda": "mechanics",
+          "layer": 1,
+          "status": "idea",
+          "tags": [],
+          "params": [],
+          "position": { "x": 0, "y": 1000 },
+          "returnHook": "Reaching the next shrine is a small goal the player can set for themselves every few minutes."
+        },
+        {
+          "id": "n_prog_upgrades",
+          "kind": "progression",
+          "title": "Lantern upgrades",
+          "description": "Treasure buys a bigger oil tank and a wider light between runs.",
+          "mda": "mechanics",
+          "layer": 2,
+          "status": "idea",
+          "tags": [],
+          "params": [],
+          "position": { "x": 0, "y": 1200 },
+          "prototypeScope": "stub"
+        },
+        {
+          "id": "n_story_town",
+          "kind": "narrative",
+          "title": "The drowned town",
+          "description": "The caves are the streets of a town that sank. Notes found in the dark piece together why the lanterns were lit.",
+          "mda": "mechanics",
+          "layer": 3,
+          "status": "idea",
+          "tags": [],
+          "params": [],
+          "position": { "x": 300, "y": 1200 },
+          "contentCost": "medium",
+          "prototypeScope": "skip"
+        }
+      ],
+      "edges": [
+        { "id": "e1", "kind": "serves", "source": "n_aes_tense", "target": "n_pillar_light" },
+        { "id": "e2", "kind": "serves", "source": "n_persona_cautious", "target": "n_aes_tense" },
+        { "id": "e3", "kind": "leadsTo", "source": "n_dyn_detours", "target": "n_aes_tense" },
+        { "id": "e4", "kind": "triggers", "source": "n_act_move", "target": "n_loop" },
+        { "id": "e5", "kind": "triggers", "source": "n_loop", "target": "n_mech_burn" },
+        {
+          "id": "e6",
+          "kind": "feeds",
+          "source": "n_res_oil",
+          "target": "n_mech_burn",
+          "label": "burned"
+        },
+        {
+          "id": "e7",
+          "kind": "feeds",
+          "source": "n_mech_pickup",
+          "target": "n_res_oil",
+          "label": "refills"
+        },
+        {
+          "id": "e8",
+          "kind": "feeds",
+          "source": "n_mech_shrine",
+          "target": "n_res_oil",
+          "label": "refills"
+        },
+        { "id": "e9", "kind": "leadsTo", "source": "n_mech_burn", "target": "n_dyn_detours" },
+        { "id": "e10", "kind": "leadsTo", "source": "n_mech_pickup", "target": "n_dyn_detours" },
+        { "id": "e11", "kind": "leadsTo", "source": "n_mech_shrine", "target": "n_aes_tense" },
+        { "id": "e12", "kind": "requires", "source": "n_mech_shrine", "target": "n_res_oil" },
+        { "id": "e13", "kind": "unlocks", "source": "n_prog_upgrades", "target": "n_mech_shrine" },
+        { "id": "e14", "kind": "modifies", "source": "n_prog_upgrades", "target": "n_res_oil" },
+        { "id": "e15", "kind": "serves", "source": "n_story_town", "target": "n_aes_tense" }
+      ]
+    },
+    "g_loop": {
+      "id": "g_loop",
+      "name": "Explore, burn, return",
+      "parentNodeId": "n_loop",
+      "nodes": [
+        {
+          "id": "n_state_out",
+          "kind": "state",
+          "title": "In the caves",
+          "description": "The player is away from any shrine and the lantern is burning.",
+          "mda": "mechanics",
+          "layer": 0,
+          "status": "prototyped",
+          "tags": [],
+          "params": [],
+          "position": { "x": 0, "y": 0 }
+        },
+        {
+          "id": "n_state_safe",
+          "kind": "state",
+          "title": "At a shrine",
+          "description": "The lantern is refilling and the run is saved.",
+          "mda": "mechanics",
+          "layer": 0,
+          "status": "designed",
+          "tags": [],
+          "params": [],
+          "position": { "x": 300, "y": 0 }
+        },
+        {
+          "id": "n_event_dark",
+          "kind": "event",
+          "title": "Flame dies",
+          "description": "Oil reached zero. The screen goes black and the run ends.",
+          "mda": "mechanics",
+          "layer": 0,
+          "status": "prototyped",
+          "tags": [],
+          "params": [],
+          "position": { "x": 0, "y": 200 }
+        }
+      ],
+      "edges": [
+        {
+          "id": "le1",
+          "kind": "triggers",
+          "source": "n_state_out",
+          "target": "n_state_safe",
+          "label": "reach a shrine"
+        },
+        {
+          "id": "le2",
+          "kind": "triggers",
+          "source": "n_state_safe",
+          "target": "n_state_out",
+          "label": "leave the shrine"
+        },
+        {
+          "id": "le3",
+          "kind": "triggers",
+          "source": "n_state_out",
+          "target": "n_event_dark",
+          "label": "oil is zero"
+        }
+      ]
+    }
+  }
+}
