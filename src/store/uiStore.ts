@@ -88,7 +88,8 @@ export const useUiStore = create<UiState>()((set, get) => ({
   mode: 'graph',
   view: 'graph',
   sidebarTab: 'inspector',
-  sidebarOpen: true,
+  // On a narrow window the side panel would cover the canvas, so it starts closed.
+  sidebarOpen: typeof window === 'undefined' || window.innerWidth >= 900,
   pathStep: null,
   filter: { statuses: [], tag: null },
 

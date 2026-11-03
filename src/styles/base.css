@@ -66,6 +66,24 @@ body {
   display: grid;
   grid-template-columns: 200px 1fr auto;
   min-height: 0;
+  position: relative;
+}
+
+/* Narrow window: the palette gets thinner and the open side panel floats over the canvas. */
+@media (max-width: 899px) {
+  .app-body {
+    grid-template-columns: 150px 1fr auto;
+  }
+
+  .app-body > .sidebar:not(.sidebar-collapsed) {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    width: min(320px, 85%);
+    box-shadow: -4px 0 16px rgb(0 0 0 / 0.18);
+  }
 }
 
 .canvas {
